@@ -1613,11 +1613,23 @@ class Component extends DCLogic {
     const evtFilter = s.eventsFilter || 'all';
     const eventsFilterPills = [{ id: 'all', name: 'All folders' }].concat(s.folders.map(f => ({ id: f.id, name: f.name }))).map(o => { const active = evtFilter === o.id; return { id: o.id, name: o.name, active, onClick: () => this.setEventsFilter(o.id), bg: active ? RED : '#fff', color: active ? '#fff' : '#52525B', border: active ? RED : '#D4D4D8' }; });
     const eventsList = s.events.filter(e => evtFilter === 'all' || e.folderId === evtFilter).map(e => {
-      const ph = phChip(this.phaseOf(e));
+      const phase = this.phaseOf(e);
+      const ph = phChip(phase);
       const fld = this.folder(e.folderId);
       const qCount = (e.regForm && e.regForm.questions) ? e.regForm.questions.length : 0;
       const tagList = (e.tags && e.tags.length) ? e.tags : ['All cohorts'];
-      return { id: e.id, title: e.title, meta: e.code + '  ·  ' + e.category + '  ·  ' + this.fmtDate(e.date), folderName: fld ? fld.name : '—', seatsLabel: (e.seatsTotal - e.seatsLeft) + ' / ' + e.seatsTotal + ' filled', cohortLabel: tagList.length > 2 ? (tagList.slice(0, 2).join(', ') + ' +' + (tagList.length - 2)) : tagList.join(', '), formLabel: qCount + ' question' + (qCount === 1 ? '' : 's'), phLabel: ph.label, phBg: ph.bg, phColor: ph.color, onEdit: () => this.editEvent(e.id) };
+      // During the lottery window seats aren't assigned yet, so show how many people
+      // entered vs. available spots — demand can exceed spots (e.g. 60 / 30 entered).
+      // Once the draw is done (open/scheduled), show seats actually filled.
+      let seatsLabel;
+      if (phase === 'lottery') {
+        const userEntered = s.registrations.some(r => r.eventId === e.id && r.type === 'lottery');
+        const demand = e.entrants + (userEntered ? 1 : 0);
+        seatsLabel = demand + ' / ' + e.seatsTotal + ' entered';
+      } else {
+        seatsLabel = (e.seatsTotal - e.seatsLeft) + ' / ' + e.seatsTotal + ' filled';
+      }
+      return { id: e.id, title: e.title, meta: e.code + '  ·  ' + e.category + '  ·  ' + this.fmtDate(e.date), folderName: fld ? fld.name : '—', seatsLabel: seatsLabel, cohortLabel: tagList.length > 2 ? (tagList.slice(0, 2).join(', ') + ' +' + (tagList.length - 2)) : tagList.join(', '), formLabel: qCount + ' question' + (qCount === 1 ? '' : 's'), phLabel: ph.label, phBg: ph.bg, phColor: ph.color, onEdit: () => this.editEvent(e.id) };
     });
     const eventsTitle = evtFilter === 'all' ? 'All events' : ('Events in ' + (this.folder(evtFilter) ? this.folder(evtFilter).name : ''));
     const eventsCount = eventsList.length;
