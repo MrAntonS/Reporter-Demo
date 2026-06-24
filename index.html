@@ -1109,7 +1109,14 @@ class Component extends DCLogic {
   }
 
   // ---------- registration popup (form engine + terms) ----------
+  standardForm() {
+    const qs = ['carpool', 'food'].map(id => { const q = this.state.questionLibrary.find(x => x.id === id); return { id: q.id, label: q.label, prompt: q.prompt, type: q.type, options: q.options, required: q.required, source: 'lib' }; });
+    return { questions: qs, terms: ['conduct'] };
+  }
   componentDidMount() {
+    // seed events predate per-event forms — attach the standard registration form so the
+    // Manage-events list and the editor agree.
+    this.setState(s => ({ events: s.events.map(e => e.regForm ? e : { ...e, regForm: this.standardForm(), tags: e.tags || ['All cohorts'] }) }));
     try {
       const a = localStorage.getItem('reporter_answers');
       if (a) { const parsed = JSON.parse(a); if (parsed && typeof parsed === 'object') this.setState({ studentAnswers: parsed }); }
