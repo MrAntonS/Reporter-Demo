@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Libre Franklin', system-ui, sans-serif; color: #1A1A1A; background: #F1F1F2; -webkit-font-smoothing: antialiased; }
+  ::selection { background: #CC0000; color: #fff; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+  .rte-content { font-size: 15px; line-height: 1.7; color: #3F3F46; }
+  .rte-content h3 { font-size: 17px; font-weight: 700; color: #1A1A1A; margin: 22px 0 8px; }
+  .rte-content p { margin: 0 0 14px; }
+  .rte-content ul { margin: 0 0 14px; padding-left: 20px; }
+  .rte-content li { margin: 4px 0; }
+  .rte-content a { color: #CC0000; text-decoration: underline; }
+  .rte-content img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+  .rte-content strong { color: #1A1A1A; }
+  .rte-editor { outline: none; min-height: 150px; }
+  .rte-editor:empty:before { content: attr(data-ph); color: #A1A1AA; }
+  .rte-editor:focus { background: #fff; }
+  input, textarea, select, button { font-family: inherit; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid #CC0000; outline-offset: 0; border-color: transparent; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #C7C7CC; border-radius: 6px; border: 2px solid #F1F1F2; }
+  ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
+</style>
+</helmet>
+
+<div style="min-height: 100vh;">
+
+  <!-- ===================== LOGIN ===================== -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+    <div style="min-height: 100vh; display: flex; flex-direction: column; background: #E9E9EB;">
+      <div style="height: 64px; background: #111; display: flex; align-items: center; padding: 0 28px; gap: 16px;">
+        <div style="background: #CC0000; color: #fff; font-weight: 800; font-size: 18px; letter-spacing: .5px; padding: 8px 12px; line-height: 1;">NC&nbsp;STATE</div>
+        <div style="color: #fff; font-weight: 300; font-size: 20px; letter-spacing: 4px;">REPORTER</div>
+      </div>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px;">
+        <div style="width: 100%; max-width: 960px; background: #fff; border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.14); overflow: hidden; display: grid; grid-template-columns: 1.05fr .95fr;">
+          <div style="padding: 48px 44px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 1.5px; color: #CC0000; text-transform: uppercase;">Sign in</div>
+            <h1 style="font-size: 30px; font-weight: 800; margin: 8px 0 6px; letter-spacing: -.5px;">Log in to REPORTER</h1>
+            <p style="color: #71717A; font-size: 15px; margin: 0 0 28px; line-height: 1.6;">Choose how you'd like to sign in to register for courses and events.</p>
+
+            <button onClick="{{ loginStudent }}" style="width: 100%; display: flex; align-items: center; gap: 16px; background: #CC0000; color: #fff; border: none; border-radius: 10px; padding: 16px 18px; cursor: pointer; text-align: left; margin-bottom: 12px; transition: filter .15s;" style-hover="{{ hoverDarken }}">
+              <span style="display: inline-flex; width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,.16); align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
+              </span>
+              <span>
+                <span style="display: block; font-size: 16px; font-weight: 700;">Unity ID Login</span>
+                <span style="display: block; font-size: 12.5px; opacity: .85;">NC State Students / Faculty / Staff</span>
+              </span>
+            </button>
+
+            <button onClick="{{ loginGuest }}" style="width: 100%; display: flex; align-items: center; gap: 16px; background: #fff; color: #1A1A1A; border: 1.5px solid #D4D4D8; border-radius: 10px; padding: 16px 18px; cursor: pointer; text-align: left;" style-hover="{{ hoverGray }}">
+              <span style="display: inline-flex; width: 40px; height: 40px; border-radius: 8px; background: #F4F4F5; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#52525B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+              </span>
+              <span>
+                <span style="display: block; font-size: 16px; font-weight: 700;">Guest (Brickyard) Login</span>
+                <span style="display: block; font-size: 12.5px; color: #71717A;">Guests / Affiliates / Parents</span>
+              </span>
+            </button>
+
+            <div style="margin-top: 26px; padding-top: 22px; border-top: 1px solid #ECECEE; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <span style="font-size: 13px; color: #A1A1AA;">Reviewing for a department?</span>
+              <button onClick="{{ loginAdmin }}" style="background: #1A1A1A; color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="{{ hoverDarken }}">Sign in as Administrator →</button>
+            </div>
+          </div>
+
+          <div style="background: linear-gradient(150deg, #2A0808 0%, #5c0d0d 45%, #CC0000 130%); padding: 48px 44px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; inset: 0; opacity: .12; background-image: repeating-linear-gradient(135deg, #fff 0 1px, transparent 1px 22px);"></div>
+            <div style="position: relative;">
+              <div style="background: #fff; color: #CC0000; display: inline-block; font-weight: 800; font-size: 15px; padding: 6px 9px; line-height: 1;">NC&nbsp;STATE</div>
+              <h2 style="font-size: 25px; font-weight: 800; margin: 22px 0 10px; line-height: 1.25;">A cleaner way to find and register for campus programs.</h2>
+              <p style="font-size: 14.5px; line-height: 1.65; color: rgba(255,255,255,.82); margin: 0;">Browse upcoming events, enter program lotteries, and manage everything you're registered for — all in one place.</p>
+            </div>
+            <div style="position: relative; margin-top: 32px; font-size: 12.5px; color: rgba(255,255,255,.7);">
+              <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;"><span style="opacity:.7;">Help Desk</span> 919.515.HELP (4357)</div>
+              <div>help.ncsu.edu</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding: 20px; font-size: 12px; color: #9A9A9F;">Prototype concept · Not an official NC State system</div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== APP ===================== -->
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height: 100vh; display: flex; flex-direction: column;">
+
+      <!-- TOP BAR -->
+      <header style="height: 60px; background: #141414; display: flex; align-items: center; padding: 0 20px; gap: 14px; position: sticky; top: 0; z-index: 40; flex-shrink: 0;">
+        <div style="background: #CC0000; color: #fff; font-weight: 800; font-size: 15px; letter-spacing: .3px; padding: 7px 10px; line-height: 1;">NC&nbsp;STATE</div>
+        <div style="color: #fff; font-weight: 300; font-size: 17px; letter-spacing: 3px;">REPORTER</div>
+        <div style="flex: 1;"></div>
+
+        <!-- notifications -->
+        <div style="position: relative;">
+          <button onClick="{{ toggleNotif }}" style="background: transparent; border: none; color: #E4E4E7; cursor: pointer; padding: 8px; display: flex; position: relative;" style-hover="{{ hoverWhite }}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <sc-if value="{{ hasNotif }}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px; background: #CC0000; color: #fff; font-size: 10px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 2px solid #141414;">{{ notifCount }}</span>
+            </sc-if>
+          </button>
+          <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: 46px; right: 0; width: 340px; background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.22); overflow: hidden; z-index: 50; animation: fadeUp .18s ease;">
+              <div style="padding: 14px 16px; border-bottom: 1px solid #EEE; font-weight: 700; font-size: 14px; display: flex; justify-content: space-between; align-items: center;">Notifications <span onClick="{{ clearNotif }}" style="font-size: 12px; font-weight: 500; color: #CC0000; cursor: pointer;">Mark all read</span></div>
+              <div style="max-height: 360px; overflow-y: auto;">
+                <sc-if value="{{ noNotifs }}" hint-placeholder-val="{{ true }}">
+                  <div style="padding: 34px 16px; text-align: center; color: #A1A1AA; font-size: 13px;">No notifications yet.<br>Enter a lottery and advance the demo clock to see results here.</div>
+                </sc-if>
+                <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="0">
+                  <div style="padding: 13px 16px; border-bottom: 1px solid #F4F4F5; display: flex; gap: 11px;">
+                    <span style="width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: {{ n.bg }}; color: {{ n.color }};">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.icon }}"/></svg>
+                    </span>
+                    <div>
+                      <div style="font-size: 13.5px; font-weight: 600; color: #1A1A1A; line-height: 1.35;">{{ n.title }}</div>
+                      <div style="font-size: 12.5px; color: #71717A; line-height: 1.4; margin-top: 2px;">{{ n.body }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <button style="background: transparent; border: none; color: #E4E4E7; cursor: pointer; padding: 8px; display: flex;" style-hover="{{ hoverWhite }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        </button>
+
+        <!-- account -->
+        <div style="position: relative; margin-left: 4px;">
+          <button onClick="{{ toggleMenu }}" style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 5px 12px 5px 5px; cursor: pointer;" style-hover="{{ hoverChip }}">
+            <span style="width: 30px; height: 30px; border-radius: 50%; background: #CC0000; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ userInitials }}</span>
+            <span style="text-align: left; line-height: 1.15;">
+              <span style="display: block; color: #fff; font-size: 13px; font-weight: 600;">{{ userName }}</span>
+              <span style="display: block; color: #A1A1AA; font-size: 11px;">{{ roleLabel }}</span>
+            </span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: 52px; right: 0; width: 240px; background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.22); overflow: hidden; z-index: 50; animation: fadeUp .18s ease;">
+              <div style="padding: 14px 16px; border-bottom: 1px solid #EEE;">
+                <div style="font-weight: 700; font-size: 14px;">{{ userName }}</div>
+                <div style="font-size: 12px; color: #71717A;">{{ userUnity }}</div>
+              </div>
+              <div onClick="{{ switchRole }}" style="padding: 12px 16px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 13.5px; color: #3F3F46;" style-hover="{{ hoverRow }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#52525B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg>
+                {{ switchLabel }}
+              </div>
+              <div onClick="{{ logout }}" style="padding: 12px 16px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 13.5px; color: #CC0000; border-top: 1px solid #F4F4F5;" style-hover="{{ hoverRow }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                Sign out
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </header>
+
+      <div style="display: flex; align-items: flex-start;">
+        <!-- SIDEBAR -->
+        <aside style="width: 248px; background: #fff; border-right: 1px solid #E4E4E7; flex-shrink: 0; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; align-self: stretch; position: sticky; top: 60px; min-height: calc(100vh - 60px);">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #A1A1AA; padding: 6px 12px 8px;">MENU</div>
+          <sc-for list="{{ navMain }}" as="item" hint-placeholder-count="2">
+            <button onClick="{{ item.onClick }}" style="position: relative; display: flex; align-items: center; gap: 12px; border: none; border-radius: 9px; padding: 11px 13px; cursor: pointer; font-size: 14.5px; font-weight: 600; text-align: left; transition: background .15s; background: {{ item.bg }}; color: {{ item.color }};">
+              <span style="position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: {{ item.barColor }};"></span>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ item.icon }}"/></svg>
+              {{ item.label }}
+            </button>
+          </sc-for>
+
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #A1A1AA; padding: 18px 12px 8px;">ADMINISTRATION</div>
+            <sc-for list="{{ navAdmin }}" as="item" hint-placeholder-count="4">
+              <button onClick="{{ item.onClick }}" style="position: relative; display: flex; align-items: center; gap: 12px; border: none; border-radius: 9px; padding: 11px 13px; cursor: pointer; font-size: 14.5px; font-weight: 600; text-align: left; transition: background .15s; background: {{ item.bg }}; color: {{ item.color }};">
+                <span style="position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: {{ item.barColor }};"></span>
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ item.icon }}"/></svg>
+                {{ item.label }}
+              </button>
+            </sc-for>
+          </sc-if>
+
+          <div style="flex: 1;"></div>
+          <div style="background: #FAF6F6; border: 1px solid #F1E2E2; border-radius: 11px; padding: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: #CC0000; margin-bottom: 4px;">{{ phaseTagLabel }}</div>
+            <div style="font-size: 12px; color: #71717A; line-height: 1.45;">{{ phaseTagText }}</div>
+          </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main style="flex: 1; min-width: 0; padding: 32px 40px 80px; min-height: calc(100vh - 60px);">
+
+          <!-- HOME -->
+          <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1080px; margin: 0 auto;">
+              <div style="font-size: 13px; color: #A1A1AA; font-weight: 600;">{{ nowDateLabel }}</div>
+              <h1 style="font-size: 28px; font-weight: 800; margin: 4px 0 0; letter-spacing: -.5px;">Welcome back, {{ firstName }}</h1>
+
+              <sc-if value="{{ showLotteryBanner }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top: 22px; background: linear-gradient(120deg, #2A0808, #6c1010); border-radius: 14px; padding: 22px 26px; color: #fff; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+                  <div style="flex: 1; min-width: 280px;">
+                    <div style="display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.14); padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; margin-bottom: 10px;"><span style="width: 7px; height: 7px; background: #FFC857; border-radius: 50%; animation: pulse 1.6s infinite;"></span> Lottery window open</div>
+                    <div style="font-size: 19px; font-weight: 700;">{{ lotteryFolderName }} lottery is live</div>
+                    <div style="font-size: 14px; color: rgba(255,255,255,.82); margin-top: 5px; line-height: 1.5;">Enter for up to <b style="color:#fff;">{{ lotteryMax }}</b> events. {{ lotteryCloseLabel }} a random draw assigns seats and you'll be notified.</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 12px; color: rgba(255,255,255,.7);">Entries used</div>
+                    <div style="font-size: 34px; font-weight: 800; line-height: 1.1;">{{ lotteryUsed }}<span style="font-size: 18px; color: rgba(255,255,255,.6);">/{{ lotteryMax }}</span></div>
+                    <button onClick="{{ goCatalog }}" style="margin-top: 8px; background: #fff; color: #CC0000; border: none; border-radius: 8px; padding: 9px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;">Browse events</button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <div style="display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 14px; gap: 16px; flex-wrap: wrap;">
+                <h2 style="font-size: 18px; font-weight: 700; margin: 0;">My events <span style="color:#A1A1AA; font-weight:600;">({{ myCount }})</span></h2>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <sc-if value="{{ hasMyEvents }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 9px;">
+                      <span style="font-size: 12.5px; color: #A1A1AA; font-weight: 600;">Sort by date</span>
+                      <div style="display: inline-flex; border: 1px solid #D4D4D8; border-radius: 8px; overflow: hidden;">
+                        <button onClick="{{ sortSoonest }}" style="border: none; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; background: {{ soonestBg }}; color: {{ soonestColor }};">Soonest</button>
+                        <button onClick="{{ sortLatest }}" style="border: none; border-left: 1px solid #D4D4D8; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; background: {{ latestBg }}; color: {{ latestColor }};">Latest</button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <span onClick="{{ goCatalog }}" style="font-size: 13.5px; font-weight: 600; color: #CC0000; cursor: pointer;">Find more events →</span>
+                </div>
+              </div>
+
+              <sc-if value="{{ myEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="background: #fff; border: 1px dashed #D4D4D8; border-radius: 14px; padding: 48px; text-align: center;">
+                  <div style="font-size: 15px; font-weight: 600; color: #52525B;">You're not registered for anything yet.</div>
+                  <button onClick="{{ goCatalog }}" style="margin-top: 14px; background: #CC0000; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 600; cursor: pointer;">Browse the catalog</button>
+                </div>
+              </sc-if>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px;">
+                <sc-for list="{{ myEvents }}" as="c" hint-placeholder-count="0">
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;">
+                    <div style="height: 96px; position: relative; background: {{ c.imgBgValue }};">
+                      <span style="position: absolute; top: 10px; left: 10px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: {{ c.statusBg }}; color: {{ c.statusColor }};">{{ c.statusLabel }}</span>
+                    </div>
+                    <div style="padding: 15px 16px 16px; flex: 1; display: flex; flex-direction: column;">
+                      <div style="font-size: 11px; color: #A1A1AA; font-weight: 600;">{{ c.category }}</div>
+                      <div style="font-size: 16px; font-weight: 700; margin: 3px 0 8px; line-height: 1.3;">{{ c.title }}</div>
+                      <div style="font-size: 12.5px; color: #71717A; display: flex; gap: 6px; align-items: center; margin-bottom: 4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>{{ c.dateLabel }}</div>
+                      <div style="font-size: 12.5px; color: #71717A; display: flex; gap: 6px; align-items: center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>{{ c.location }}</div>
+                      <div style="flex: 1;"></div>
+                      <div style="display: flex; gap: 8px; margin-top: 14px;">
+                        <button onClick="{{ c.onView }}" style="flex: 1; background: #fff; border: 1px solid #D4D4D8; color: #1A1A1A; border-radius: 8px; padding: 9px; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="{{ hoverGray }}">View details</button>
+                        <button onClick="{{ c.onAction }}" disabled="{{ c.actionDisabled }}" style="flex: 1; border: none; border-radius: 8px; padding: 9px; font-size: 13px; font-weight: 600; cursor: pointer; background: {{ c.actionBg }}; color: {{ c.actionColor }};">{{ c.actionLabel }}</button>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- CATALOG -->
+          <sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1120px; margin: 0 auto;">
+              <h1 style="font-size: 28px; font-weight: 800; margin: 0 0 4px; letter-spacing: -.5px;">Catalog</h1>
+              <p style="color: #71717A; margin: 0 0 22px; font-size: 14.5px;">Browse upcoming courses and events open for registration.</p>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 22px;">
+                <div style="flex: 1; min-width: 260px; position: relative;">
+                  <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%);" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Search events…" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 10px; padding: 12px 14px 12px 40px; font-size: 14.5px; background: #fff;" />
+                </div>
+                <sc-for list="{{ catFilters }}" as="f" hint-placeholder-count="4">
+                  <button onClick="{{ f.onClick }}" style="border: {{ f.border }}; border-radius: 999px; padding: 9px 15px; font-size: 13px; font-weight: 600; cursor: pointer; background: {{ f.bg }}; color: {{ f.color }};">{{ f.label }}</button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ catEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="background: #fff; border: 1px dashed #D4D4D8; border-radius: 14px; padding: 48px; text-align: center; color: #71717A;">No events match your search.</div>
+              </sc-if>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px;">
+                <sc-for list="{{ catalogCards }}" as="c" hint-placeholder-count="6">
+                  <div onClick="{{ c.onView }}" style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: box-shadow .15s, transform .15s;" style-hover="{{ hoverCard }}">
+                    <div style="height: 130px; position: relative; background: {{ c.imgBgValue }};">
+                      <span style="position: absolute; top: 11px; left: 11px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: {{ c.phaseBg }}; color: {{ c.phaseColor }};">{{ c.phaseLabel }}</span>
+                      <sc-if value="{{ c.placeholderImg }}" hint-placeholder-val="{{ true }}">
+                        <span style="position: absolute; bottom: 10px; right: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0,0,0,.32);">{{ c.code }}</span>
+                      </sc-if>
+                    </div>
+                    <div style="padding: 15px 17px 17px; flex: 1; display: flex; flex-direction: column;">
+                      <div style="font-size: 11px; color: #A1A1AA; font-weight: 600;">{{ c.category }}</div>
+                      <div style="font-size: 16.5px; font-weight: 700; margin: 3px 0 9px; line-height: 1.3;">{{ c.title }}</div>
+                      <div style="font-size: 12.5px; color: #71717A; display: flex; gap: 6px; align-items: center; margin-bottom: 4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>{{ c.dateLabel }}</div>
+                      <div style="margin: 12px 0 6px;">
+                        <div style="height: 6px; background: #EEE; border-radius: 4px; overflow: hidden;"><div style="height: 100%; border-radius: 4px; width: {{ c.barWidth }}; background: {{ c.barColor }};"></div></div>
+                        <div style="font-size: 12px; font-weight: 600; margin-top: 6px; color: {{ c.barColor }};">{{ c.barLabel }}</div>
+                      </div>
+                      <div style="flex: 1;"></div>
+                      <button onClick="{{ c.onAction }}" disabled="{{ c.actionDisabled }}" style="margin-top: 12px; border: none; border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; background: {{ c.actionBg }}; color: {{ c.actionColor }};">{{ c.actionLabel }}</button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- EVENT DETAIL -->
+          <sc-if value="{{ isEvent }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 920px; margin: 0 auto;">
+              <button onClick="{{ goBack }}" style="background: none; border: none; color: #71717A; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; margin-bottom: 18px;" style-hover="{{ hoverDarken }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Back to catalog</button>
+
+              <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; overflow: hidden;">
+                <div style="height: 220px; position: relative; display: flex; align-items: center; justify-content: center; background: {{ ev.imgBgValue }};">
+                  <span style="position: absolute; top: 16px; left: 16px; padding: 6px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 700; background: {{ ev.phaseBg }}; color: {{ ev.phaseColor }};">{{ ev.phaseLabel }}</span>
+                  <sc-if value="{{ ev.placeholderImg }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(0,0,0,.28); letter-spacing: 1px;">event photo</span>
+                  </sc-if>
+                </div>
+                <div style="padding: 28px 32px;">
+                  <div style="display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <div style="font-size: 12.5px; color: #A1A1AA; font-weight: 700; letter-spacing: .3px;">{{ ev.category }} · {{ ev.code }}</div>
+                      <h1 style="font-size: 27px; font-weight: 800; margin: 5px 0 0; letter-spacing: -.5px;">{{ ev.title }}</h1>
+                      <div style="display: flex; gap: 22px; flex-wrap: wrap; margin: 18px 0 4px;">
+                        <div style="display: flex; gap: 9px; align-items: center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#CC0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><div><div style="font-size:13.5px;font-weight:600;">{{ ev.dateLabel }}</div><div style="font-size:12.5px;color:#71717A;">{{ ev.timeLabel }}</div></div></div>
+                        <div style="display: flex; gap: 9px; align-items: center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#CC0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><div style="font-size:13.5px;font-weight:600;max-width:200px;">{{ ev.location }}</div></div>
+                      </div>
+                    </div>
+
+                    <div style="width: 280px; background: #FAFAFA; border: 1px solid #ECECEE; border-radius: 12px; padding: 18px;">
+                      <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 13px; color: #71717A; font-weight: 600;">{{ ev.availTitle }}</span><span style="font-size: 13px; font-weight: 700; color: {{ ev.barColor }};">{{ ev.barLabel }}</span></div>
+                      <div style="height: 8px; background: #E9E9EB; border-radius: 5px; overflow: hidden; margin: 9px 0 4px;"><div style="height: 100%; border-radius: 5px; width: {{ ev.barWidth }}; background: {{ ev.barColor }};"></div></div>
+                      <div style="font-size: 12px; color: #A1A1AA;">{{ ev.barSub }}</div>
+                      <sc-if value="{{ ev.hasStatus }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top: 14px; padding: 10px 12px; border-radius: 9px; font-size: 13px; font-weight: 600; display: flex; gap: 8px; align-items: center; background: {{ ev.statusBg }}; color: {{ ev.statusColor }};"><span style="width:8px;height:8px;border-radius:50%;background:currentColor;"></span>{{ ev.statusLabel }}</div>
+                      </sc-if>
+                      <button onClick="{{ ev.onAction }}" disabled="{{ ev.actionDisabled }}" style="margin-top: 14px; width: 100%; border: none; border-radius: 9px; padding: 13px; font-size: 15px; font-weight: 700; cursor: pointer; background: {{ ev.actionBg }}; color: {{ ev.actionColor }};">{{ ev.actionLabel }}</button>
+                      <sc-if value="{{ ev.showCancel }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ ev.onCancel }}" style="margin-top: 8px; width: 100%; background: none; border: none; color: #71717A; font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: underline;">{{ ev.cancelLabel }}</button>
+                      </sc-if>
+                      <div style="margin-top: 12px; font-size: 11.5px; color: #A1A1AA; line-height: 1.45;">{{ ev.actionHint }}</div>
+                    </div>
+                  </div>
+
+                  <div style="height: 1px; background: #ECECEE; margin: 24px 0;"></div>
+                  <h2 style="font-size: 17px; font-weight: 700; margin: 0 0 4px;">About this event</h2>
+                  <div style="margin-top: 8px;">{{ ev.descNode }}</div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN DASHBOARD -->
+          <sc-if value="{{ isAdminDash }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1120px; margin: 0 auto;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                  <h1 style="font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -.5px;">Admin dashboard</h1>
+                  <p style="color: #71717A; margin: 4px 0 0; font-size: 14.5px;">Programs, release folders and registration activity.</p>
+                </div>
+                <button onClick="{{ goCreate }}" style="background: #CC0000; color: #fff; border: none; border-radius: 9px; padding: 12px 18px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; gap: 8px; align-items: center;" style-hover="{{ hoverDarken }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Create event</button>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0 30px;">
+                <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; padding: 20px;">
+                    <div style="font-size: 12.5px; color: #71717A; font-weight: 600;">{{ s.label }}</div>
+                    <div style="font-size: 30px; font-weight: 800; margin: 6px 0 2px; letter-spacing: -1px;">{{ s.value }}</div>
+                    <div style="font-size: 12px; color: #A1A1AA;">{{ s.sub }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 22px;">
+                <div>
+                  <h2 style="font-size: 17px; font-weight: 700; margin: 0 0 14px;">Release folders</h2>
+                  <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <sc-for list="{{ folderCards }}" as="f" hint-placeholder-count="3">
+                      <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 13px; padding: 17px 19px; display: flex; align-items: center; gap: 16px;">
+                        <div style="flex: 1;">
+                          <div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 15.5px; font-weight: 700;">{{ f.name }}</span><span style="padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: {{ f.statusBg }}; color: {{ f.statusColor }};">{{ f.statusLabel }}</span></div>
+                          <div style="font-size: 12.5px; color: #71717A; margin-top: 5px;">{{ f.meta }}</div>
+                        </div>
+                        <div style="text-align: right;">
+                          <div style="font-size: 22px; font-weight: 800; line-height: 1;">{{ f.count }}</div>
+                          <div style="font-size: 11px; color: #A1A1AA;">events</div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <button onClick="{{ goFolders }}" style="margin-top: 14px; background: #fff; border: 1px solid #D4D4D8; border-radius: 8px; padding: 10px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer;" style-hover="{{ hoverGray }}">Manage folders & scheduling →</button>
+                </div>
+                <div>
+                  <h2 style="font-size: 17px; font-weight: 700; margin: 0 0 14px;">Recent activity</h2>
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 13px; padding: 6px 18px;">
+                    <sc-for list="{{ activity }}" as="a" hint-placeholder-count="4">
+                      <div style="display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid #F4F4F5;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; background: {{ a.dotColor }};"></span>
+                        <div><div style="font-size: 13.5px; font-weight: 600; line-height: 1.35;">{{ a.text }}</div><div style="font-size: 12px; color: #A1A1AA; margin-top: 1px;">{{ a.when }}</div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN CREATE EVENT -->
+          <sc-if value="{{ isAdminCreate }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1080px; margin: 0 auto;">
+              <button onClick="{{ createBack }}" style="background: none; border: none; color: #71717A; font-size: 13.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; margin-bottom: 16px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>{{ createBackLabel }}</button>
+              <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 22px; letter-spacing: -.5px;">{{ createHeading }}</h1>
+
+              <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start;">
+                <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 26px 28px;">
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Event title</label>
+                  <input value="{{ form.title }}" onInput="{{ setTitle }}" placeholder="e.g. Adulting 101: Money & Taxes" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px; margin-bottom: 18px;" />
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div><label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Course code</label><input value="{{ form.code }}" onInput="{{ setCode }}" placeholder="EMAS-GTS-A" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px;" /></div>
+                    <div><label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Category</label>
+                      <select value="{{ form.category }}" onChange="{{ setCategory }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px; background: #fff;">
+                        <sc-for list="{{ categoryOptions }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 18px;">
+                    <div><label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Date</label><input type="date" value="{{ form.date }}" onInput="{{ setDate }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 12px; font-size: 14px;" /></div>
+                    <div><label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Time</label><input value="{{ form.time }}" onInput="{{ setTime }}" placeholder="5:00 PM – 6:30 PM" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14px;" /></div>
+                    <div><label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Seats</label><input type="number" value="{{ form.seats }}" onInput="{{ setSeats }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14px;" /></div>
+                  </div>
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 18px 0 6px;">Location</label>
+                  <input value="{{ form.location }}" onInput="{{ setLocation }}" placeholder="Talley Student Union 3210" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px;" />
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 18px 0 6px;">Release folder</label>
+                  <select value="{{ form.folderId }}" onChange="{{ setFolder }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px; background: #fff;">
+                    <sc-for list="{{ folderOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.id }}">{{ o.name }}</option></sc-for>
+                  </select>
+                  <div style="font-size: 12px; color: #A1A1AA; margin-top: 6px; line-height: 1.45;">{{ folderHint }}</div>
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 22px 0 5px;">Cohorts</label>
+                  <div style="font-size: 12px; color: #A1A1AA; margin-bottom: 9px; line-height: 1.45;">Choose which student cohorts can see and register for the event. Keep <b>All cohorts</b> for an event open to everyone.</div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button onClick="{{ allCohort.onToggle }}" style="border: 1px solid {{ allCohort.border }}; background: {{ allCohort.bg }}; color: {{ allCohort.color }}; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;"><sc-if value="{{ allCohort.selected }}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ allCohort.label }}</button>
+                    <sc-for list="{{ currentCohortChips }}" as="t" hint-placeholder-count="5">
+                      <button onClick="{{ t.onToggle }}" style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.color }}; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><sc-if value="{{ t.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ t.label }}</button>
+                    </sc-for>
+                    <sc-if value="{{ cohortsExpanded }}" hint-placeholder-val="{{ false }}">
+                      <sc-for list="{{ pastCohortChips }}" as="t" hint-placeholder-count="0">
+                        <button onClick="{{ t.onToggle }}" style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.color }}; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><sc-if value="{{ t.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ t.label }}</button>
+                      </sc-for>
+                    </sc-if>
+                    <sc-for list="{{ customCohortChips }}" as="t" hint-placeholder-count="0">
+                      <button onClick="{{ t.onToggle }}" style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.color }}; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{ t.label }}</button>
+                    </sc-for>
+                  </div>
+                  <button onClick="{{ toggleCohorts }}" style="background: none; border: none; color: #CC0000; font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 10px 0 0; display: flex; align-items: center; gap: 5px;">{{ cohortsMoreLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ cohortsChevron }}"/></svg></button>
+                  <div style="display: flex; gap: 8px; margin-top: 11px;">
+                    <input value="{{ tagDraft }}" onInput="{{ setTagDraft }}" onKeyDown="{{ onTagKey }}" placeholder="Add a custom cohort — e.g. Cohort 2027 Honors" style="flex: 1; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 13px; font-size: 13.5px;" />
+                    <button onClick="{{ addTag }}" style="background: #1A1A1A; color: #fff; border: none; border-radius: 9px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer;">Add cohort</button>
+                  </div>
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 24px 0 8px;">Registration form</label>
+                  <div style="border: 1px solid #E9E9EB; border-radius: 12px; overflow: hidden;">
+                    <button onClick="{{ toggleFormPanel }}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #FAFAFA; border: none; border-bottom: {{ formPanelBorder }}; padding: 14px 16px; cursor: pointer; text-align: left;">
+                      <div>
+                        <div style="font-size: 14px; font-weight: 700; color: #1A1A1A;">Registration form</div>
+                        <div style="font-size: 12.5px; color: #71717A; margin-top: 2px;">{{ formSummary }}</div>
+                      </div>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ formChevron }}"/></svg>
+                    </button>
+
+                    <sc-if value="{{ formExpanded }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding: 18px;">
+                        <div style="font-size: 12px; font-weight: 800; letter-spacing: .4px; color: #71717A; text-transform: uppercase; margin-bottom: 4px;">Questions in this form</div>
+                        <div style="font-size: 12.5px; color: #A1A1AA; margin-bottom: 12px;">Shown in order to every student at sign-up.</div>
+                        <sc-if value="{{ formQEmpty }}" hint-placeholder-val="{{ false }}">
+                          <div style="border: 1px dashed #D4D4D8; border-radius: 10px; padding: 18px; text-align: center; font-size: 13px; color: #A1A1AA;">No questions yet — add one from your library, or just collect terms agreement.</div>
+                        </sc-if>
+                        <div style="display: flex; flex-direction: column; gap: 9px;">
+                          <sc-for list="{{ formQRows }}" as="q" hint-placeholder-count="2">
+                            <div style="border: 1px solid #ECECEE; border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 11px;">
+                              <div style="flex: 1; min-width: 0;">
+                                <div style="font-size: 13.5px; font-weight: 600; line-height: 1.4;">{{ q.prompt }}</div>
+                                <div style="display: flex; gap: 7px; align-items: center; margin-top: 6px;">
+                                  <span style="font-size: 11px; font-weight: 600; color: #6F7271; background: #F4F4F5; border-radius: 5px; padding: 2px 8px;">{{ q.typeLabel }}</span>
+                                  <sc-if value="{{ q.isOnce }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 700; color: #B45309; background: #FCEFDD; border-radius: 5px; padding: 2px 8px;">One-time</span></sc-if>
+                                </div>
+                              </div>
+                              <button onClick="{{ q.onToggleReq }}" style="border: none; background: {{ q.requiredBg }}; color: {{ q.requiredColor }}; border-radius: 7px; padding: 6px 11px; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;">{{ q.requiredLabel }}</button>
+                              <button onClick="{{ q.onRemove }}" title="Remove" style="border: none; background: transparent; color: #A1A1AA; cursor: pointer; padding: 5px; display: flex; flex-shrink: 0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+                            </div>
+                          </sc-for>
+                        </div>
+
+                        <div style="font-size: 12px; font-weight: 800; letter-spacing: .4px; color: #71717A; text-transform: uppercase; margin: 18px 0 10px;">Add from your library</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                          <sc-for list="{{ libAddRows }}" as="q" hint-placeholder-count="4">
+                            <button onClick="{{ q.onToggle }}" style="border: 1px solid {{ q.border }}; background: {{ q.bg }}; color: {{ q.color }}; border-radius: 999px; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><sc-if value="{{ q.included }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ q.label }}</button>
+                          </sc-for>
+                        </div>
+
+                        <sc-if value="{{ ocqOpen }}" hint-placeholder-val="{{ false }}">
+                          <div style="border: 1px solid #ECECEE; border-radius: 11px; padding: 15px 16px; margin-top: 14px; background: #FBFBFC;">
+                            <div style="font-size: 13px; font-weight: 700; margin-bottom: 9px;">New one-time question <span style="font-weight: 500; color: #A1A1AA;">— this event only, not saved to your library</span></div>
+                            <textarea value="{{ ocq.prompt }}" onInput="{{ setOcqPrompt }}" rows="2" placeholder="e.g. Which workshop track are you most interested in?" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 12px; font-size: 13.5px; resize: vertical; line-height: 1.5; margin-bottom: 11px;"></textarea>
+                            <div style="display: flex; gap: 10px; align-items: end; flex-wrap: wrap;">
+                              <div style="flex: 1; min-width: 150px;">
+                                <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px;">Answer type</label>
+                                <select value="{{ ocq.type }}" onChange="{{ setOcqType }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 12px; font-size: 13.5px; background: #fff;">
+                                  <option value="text">Short text</option>
+                                  <option value="textarea">Long text</option>
+                                  <option value="choice">Single choice</option>
+                                  <option value="yesno">Yes / No</option>
+                                  <option value="number">Number</option>
+                                </select>
+                              </div>
+                              <button onClick="{{ toggleOcqReq }}" style="display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 13px; font-size: 13px; font-weight: 600; cursor: pointer; height: 41px;"><span style="width: 17px; height: 17px; border-radius: 5px; border: 1.5px solid {{ ocqReqBorder }}; background: {{ ocqReqBg }}; display: flex; align-items: center; justify-content: center;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="{{ ocqReqDot }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Required</button>
+                            </div>
+                            <sc-if value="{{ ocqNeedsOptions }}" hint-placeholder-val="{{ false }}">
+                              <label style="display: block; font-size: 12px; font-weight: 700; margin: 12px 0 5px;">Choices <span style="font-weight: 500; color: #A1A1AA;">— one per line, or comma-separated</span></label>
+                              <textarea value="{{ ocq.options }}" onInput="{{ setOcqOptions }}" rows="3" placeholder="Option A&#10;Option B&#10;Option C" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 12px; font-size: 13.5px; resize: vertical; line-height: 1.6;"></textarea>
+                            </sc-if>
+                            <div style="display: flex; gap: 9px; margin-top: 13px;">
+                              <button onClick="{{ addOnce }}" style="background: #CC0000; color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;">Add to form</button>
+                              <button onClick="{{ toggleOcq }}" style="background: #fff; color: #52525B; border: 1px solid #D4D4D8; border-radius: 9px; padding: 10px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer;">Cancel</button>
+                            </div>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ ocqClosed }}" hint-placeholder-val="{{ true }}">
+                          <button onClick="{{ toggleOcq }}" style="margin-top: 12px; background: #fff; color: #CC0000; border: 1px dashed #E6BDBD; border-radius: 9px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 7px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Create a one-time question</button>
+                        </sc-if>
+
+                        <div style="height: 1px; background: #ECECEE; margin: 18px 0;"></div>
+                        <div style="font-size: 12px; font-weight: 800; letter-spacing: .4px; color: #71717A; text-transform: uppercase; margin-bottom: 10px;">Terms &amp; agreements</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                          <sc-for list="{{ formTermRows }}" as="t" hint-placeholder-count="3">
+                            <button onClick="{{ t.onToggle }}" style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; color: {{ t.color }}; border-radius: 999px; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><sc-if value="{{ t.selected }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>{{ t.name }}</button>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </div>
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 20px 0 8px;">Event image</label>
+                  <label style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: {{ imgDropBorder }}; border-radius: 12px; padding: 22px; cursor: pointer; background: {{ imgDropBg }};">
+                    <sc-if value="{{ hasFormImg }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size: 13px; font-weight: 600; color: #1E7B4F;">✓ Image added — click to replace</span>
+                    </sc-if>
+                    <sc-if value="{{ noFormImg }}" hint-placeholder-val="{{ true }}">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.6-3.6a2 2 0 0 0-2.8 0L6 20"/></svg>
+                      <span style="font-size: 13px; color: #71717A; font-weight: 600;">Click to upload a photo</span>
+                    </sc-if>
+                    <input type="file" accept="image/*" onChange="{{ onFile }}" style="display: none;" />
+                  </label>
+
+                  <label style="display: block; font-size: 13px; font-weight: 700; margin: 20px 0 8px;">Description</label>
+                  <div style="border: 1px solid #D4D4D8; border-radius: 11px; overflow: hidden;">
+                    <div style="display: flex; gap: 2px; padding: 7px 8px; border-bottom: 1px solid #ECECEE; background: #FAFAFA; flex-wrap: wrap;">
+                      <sc-for list="{{ rteButtons }}" as="b" hint-placeholder-count="6">
+                        <button onClick="{{ b.onClick }}" title="{{ b.title }}" style="min-width: 32px; height: 32px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 700; color: #3F3F46; display: flex; align-items: center; justify-content: center; padding: 0 8px;" style-hover="{{ hoverGray }}">{{ b.label }}</button>
+                      </sc-for>
+                    </div>
+                    <div class="rte-editor rte-content" contentEditable="true" ref="{{ editorRef }}" data-ph="Describe the event. Use the toolbar for headings, bold, lists, links and images." style="padding: 14px 16px;"></div>
+                  </div>
+
+                  <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button onClick="{{ saveEvent }}" style="background: #CC0000; color: #fff; border: none; border-radius: 9px; padding: 13px 26px; font-size: 15px; font-weight: 700; cursor: pointer;" style-hover="{{ hoverDarken }}">{{ createSaveLabel }}</button>
+                    <button onClick="{{ createBack }}" style="background: #fff; color: #52525B; border: 1px solid #D4D4D8; border-radius: 9px; padding: 13px 22px; font-size: 15px; font-weight: 600; cursor: pointer;">Cancel</button>
+                  </div>
+                </div>
+
+                <div style="position: sticky; top: 80px;">
+                  <div style="font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #A1A1AA; margin-bottom: 10px;">LIVE PREVIEW</div>
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; overflow: hidden;">
+                    <div style="height: 120px; position: relative; background: {{ previewImgBg }};"><span style="position: absolute; top: 11px; left: 11px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #FCEFDD; color: #B45309;">{{ previewPhase }}</span></div>
+                    <div style="padding: 15px 17px 17px;">
+                      <div style="font-size: 11px; color: #A1A1AA; font-weight: 600;">{{ previewCategory }}</div>
+                      <div style="font-size: 16.5px; font-weight: 700; margin: 3px 0 9px; line-height: 1.3;">{{ previewTitle }}</div>
+                      <div style="font-size: 12.5px; color: #71717A;">{{ previewDate }}</div>
+                      <div style="margin-top: 12px; height: 6px; background: #EEE; border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: 100%; background: #1E7B4F; border-radius: 4px;"></div></div>
+                      <div style="font-size: 12px; font-weight: 600; margin-top: 6px; color: #1E7B4F;">{{ previewSeats }} seats available</div>
+                      <div style="margin-top: 13px; padding-top: 12px; border-top: 1px solid #F1F1F2;">
+                        <div style="font-size: 10.5px; color: #A1A1AA; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;">Who can sign up</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+                          <sc-for list="{{ previewTags }}" as="t" hint-placeholder-count="1"><span style="font-size: 11px; font-weight: 600; color: #52525B; background: #F4F4F5; border-radius: 999px; padding: 3px 10px;">{{ t }}</span></sc-for>
+                        </div>
+                        <div style="font-size: 11.5px; color: #71717A; margin-top: 10px;"><b style="color: #1A1A1A;">Form:</b> {{ attachedFormLabel }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN MANAGE EVENTS -->
+          <sc-if value="{{ isAdminEvents }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1080px; margin: 0 auto;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
+                <div>
+                  <h1 style="font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -.5px;">Manage events</h1>
+                  <p style="color: #71717A; margin: 4px 0 0; font-size: 14.5px;">Edit details, cohorts and the registration form for any published event.</p>
+                </div>
+                <button onClick="{{ goCreate }}" style="background: #CC0000; color: #fff; border: none; border-radius: 9px; padding: 12px 18px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;" style-hover="{{ hoverDarken }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Create event</button>
+              </div>
+
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0 18px;">
+                <sc-for list="{{ eventsFilterPills }}" as="p" hint-placeholder-count="4">
+                  <button onClick="{{ p.onClick }}" style="border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.color }}; border-radius: 999px; padding: 8px 15px; font-size: 13px; font-weight: 600; cursor: pointer;">{{ p.name }}</button>
+                </sc-for>
+              </div>
+
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+                <h2 style="font-size: 16px; font-weight: 700; margin: 0;">{{ eventsTitle }}</h2>
+                <span style="font-size: 13px; color: #A1A1AA; font-weight: 600;">{{ eventsCount }} event(s)</span>
+              </div>
+
+              <sc-if value="{{ eventsEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="background: #fff; border: 1px dashed #D4D4D8; border-radius: 14px; padding: 44px; text-align: center; color: #71717A;">No events in this folder yet. <span onClick="{{ goCreate }}" style="color: #CC0000; font-weight: 700; cursor: pointer;">Create one →</span></div>
+              </sc-if>
+
+              <div style="display: flex; flex-direction: column; gap: 11px;">
+                <sc-for list="{{ eventsList }}" as="e" hint-placeholder-count="5">
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 13px; padding: 16px 18px; display: flex; align-items: center; gap: 16px;">
+                    <div style="flex: 1; min-width: 0;">
+                      <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
+                        <span style="font-size: 15.5px; font-weight: 700;">{{ e.title }}</span>
+                        <span style="padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; background: {{ e.phBg }}; color: {{ e.phColor }};">{{ e.phLabel }}</span>
+                      </div>
+                      <div style="font-size: 12.5px; color: #A1A1AA; margin-top: 4px;">{{ e.meta }}</div>
+                      <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px;">
+                        <span style="font-size: 12px; color: #71717A;"><b style="color:#52525B;">Folder:</b> {{ e.folderName }}</span>
+                        <span style="font-size: 12px; color: #71717A;"><b style="color:#52525B;">Cohorts:</b> {{ e.cohortLabel }}</span>
+                        <span style="font-size: 12px; color: #71717A;"><b style="color:#52525B;">Form:</b> {{ e.formLabel }}</span>
+                      </div>
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0;">
+                      <div style="font-size: 13px; font-weight: 700; color: #1A1A1A;">{{ e.seatsLabel }}</div>
+                    </div>
+                    <button onClick="{{ e.onEdit }}" style="flex-shrink: 0; background: #fff; color: #CC0000; border: 1px solid #E6BDBD; border-radius: 9px; padding: 9px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 7px;" style-hover="{{ hoverGray }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN RELEASE FOLDERS -->
+          <sc-if value="{{ isAdminFolders }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1080px; margin: 0 auto;">
+              <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 4px; letter-spacing: -.5px;">Release folders & scheduling</h1>
+              <p style="color: #71717A; margin: 0 0 8px; font-size: 14.5px; max-width: 640px; line-height: 1.55;">Group events into a folder and set a go-live date. Events stay hidden from students until the folder's release date — then the lottery window opens automatically.</p>
+
+              <div style="display: flex; flex-direction: column; gap: 16px; margin: 22px 0;">
+                <sc-for list="{{ folderEditors }}" as="f" hint-placeholder-count="3">
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; padding: 22px 24px;">
+                    <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 16px;">
+                      <span style="font-size: 17px; font-weight: 700;">{{ f.name }}</span>
+                      <span style="padding: 3px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: {{ f.statusBg }}; color: {{ f.statusColor }};">{{ f.statusLabel }}</span>
+                      <span style="font-size: 12.5px; color: #A1A1AA;">{{ f.countLabel }}</span>
+                      <div style="flex: 1;"></div>
+                      <button onClick="{{ f.onManage }}" style="background: #fff; color: #CC0000; border: 1px solid #E6BDBD; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;" style-hover="{{ hoverGray }}">{{ f.manageLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                      <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live date</label><input type="date" value="{{ f.goLiveDate }}" onInput="{{ f.onDate }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                      <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live time</label><input value="{{ f.goLiveTime }}" onInput="{{ f.onTime }}" placeholder="08:00" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                      <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Lottery window (days)</label><input type="number" value="{{ f.window }}" onInput="{{ f.onWindow }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                      <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Max entries / student</label><input type="number" value="{{ f.max }}" onInput="{{ f.onMax }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                    </div>
+                    <div style="margin-top: 14px; font-size: 12.5px; color: #71717A; background: #FAFAFA; border-radius: 9px; padding: 11px 14px; line-height: 1.5;">{{ f.ruleLabel }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background: #fff; border: 1px dashed #D4D4D8; border-radius: 14px; padding: 22px 24px;">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">New release folder</div>
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
+                  <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Name</label><input value="{{ nf.name }}" onInput="{{ setNfName }}" placeholder="Fall 2026 Programs" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                  <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live</label><input type="date" value="{{ nf.goLive }}" onInput="{{ setNfDate }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                  <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Time</label><input value="{{ nf.time }}" onInput="{{ setNfTime }}" placeholder="08:00" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                  <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Window</label><input type="number" value="{{ nf.window }}" onInput="{{ setNfWindow }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                  <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Max</label><input type="number" value="{{ nf.max }}" onInput="{{ setNfMax }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
+                  <button onClick="{{ addFolder }}" style="background: #CC0000; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer; height: 38px;" style-hover="{{ hoverDarken }}">Add</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN SIGN-UP LIMITS -->
+          <sc-if value="{{ isAdminLimits }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 880px; margin: 0 auto;">
+              <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 4px; letter-spacing: -.5px;">Sign-up limits</h1>
+              <p style="color: #71717A; margin: 0 0 22px; font-size: 14.5px; max-width: 640px; line-height: 1.55;">Control how many events a student can grab when a folder first opens. These defaults apply to new folders; each folder can override them.</p>
+
+              <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 26px 28px;">
+                <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">System defaults</div>
+                <div style="font-size: 13px; color: #71717A; margin-bottom: 20px;">Used by every new release folder unless overridden.</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 460px;">
+                  <div>
+                    <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px;">Lottery window length</label>
+                    <div style="display: flex; align-items: center; gap: 10px;"><input type="number" value="{{ defWindow }}" onInput="{{ setDefWindow }}" style="width: 80px; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 15px; font-weight: 600;" /><span style="font-size: 14px; color: #71717A;">day(s)</span></div>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px;">Max entries per student</label>
+                    <div style="display: flex; align-items: center; gap: 10px;"><input type="number" value="{{ defMax }}" onInput="{{ setDefMax }}" style="width: 80px; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 15px; font-weight: 600;" /><span style="font-size: 14px; color: #71717A;">event(s)</span></div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 22px; background: #FAF6F6; border: 1px solid #F1E2E2; border-radius: 11px; padding: 16px 18px; font-size: 13.5px; color: #52525B; line-height: 1.6;">
+                  <b style="color: #CC0000;">How it works:</b> {{ rulePreview }}
+                </div>
+              </div>
+
+              <div style="font-size: 14px; font-weight: 700; margin: 28px 0 12px;">Per-folder overrides</div>
+              <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 0; padding: 12px 20px; background: #FAFAFA; font-size: 12px; font-weight: 700; color: #71717A; border-bottom: 1px solid #ECECEE;"><span>Folder</span><span>Window</span><span>Max</span><span>Status</span></div>
+                <sc-for list="{{ limitRows }}" as="r" hint-placeholder-count="3">
+                  <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 0; padding: 14px 20px; border-bottom: 1px solid #F4F4F5; align-items: center;">
+                    <span style="font-size: 14px; font-weight: 600;">{{ r.name }}</span>
+                    <span><input type="number" value="{{ r.window }}" onInput="{{ r.onWindow }}" style="width: 64px; border: 1px solid #D4D4D8; border-radius: 7px; padding: 7px 9px; font-size: 13px;" /></span>
+                    <span><input type="number" value="{{ r.max }}" onInput="{{ r.onMax }}" style="width: 64px; border: 1px solid #D4D4D8; border-radius: 7px; padding: 7px 9px; font-size: 13px;" /></span>
+                    <span style="font-size: 12.5px; color: {{ r.statusColor }}; font-weight: 700;">{{ r.statusLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ADMIN REGISTRATION FORM -->
+          <sc-if value="{{ isAdminRegform }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width: 1120px; margin: 0 auto;">
+              <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 4px; letter-spacing: -.5px;">Registration form &amp; terms</h1>
+              <p style="color: #71717A; margin: 0 0 6px; font-size: 14.5px; max-width: 680px; line-height: 1.55;">Build the pop-up students see when they register or enter a lottery. Questions are saved to a reusable library; terms come from approved templates. This form applies to <b>every event</b>.</p>
+              <div style="display: inline-flex; gap: 8px; align-items: center; background: #FAF6F6; border: 1px solid #F1E2E2; border-radius: 999px; padding: 6px 14px; font-size: 12.5px; color: #52525B; margin-bottom: 22px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #1E7B4F;"></span>Live now · {{ activeFormCount }} question(s) · {{ activeTermsCount }} terms template(s)</div>
+
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start;">
+
+                <!-- BUILDER -->
+                <div style="display: flex; flex-direction: column; gap: 22px;">
+
+                  <!-- questions in form -->
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 22px 24px;">
+                    <div style="font-size: 16px; font-weight: 700; margin-bottom: 3px;">Questions in this form</div>
+                    <div style="font-size: 13px; color: #71717A; margin-bottom: 16px;">Shown in order to every student at sign-up.</div>
+                    <sc-if value="{{ formQEmpty }}" hint-placeholder-val="{{ false }}">
+                      <div style="border: 1px dashed #D4D4D8; border-radius: 11px; padding: 22px; text-align: center; font-size: 13.5px; color: #A1A1AA;">No questions yet — add one from your library below, or just collect terms agreement.</div>
+                    </sc-if>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                      <sc-for list="{{ formQuestionRows }}" as="q" hint-placeholder-count="2">
+                        <div style="border: 1px solid #ECECEE; border-radius: 11px; padding: 13px 15px; display: flex; align-items: center; gap: 13px;">
+                          <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 14px; font-weight: 600; line-height: 1.4;">{{ q.prompt }}</div>
+                            <div style="display: flex; gap: 7px; align-items: center; margin-top: 6px;">
+                              <span style="font-size: 11px; font-weight: 600; color: #6F7271; background: #F4F4F5; border-radius: 5px; padding: 2px 8px;">{{ q.typeLabel }}</span>
+                              <sc-if value="{{ q.common }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 700; color: #1E7B4F; background: #E2EFE7; border-radius: 5px; padding: 2px 8px;">Common</span></sc-if>
+                            </div>
+                          </div>
+                          <button onClick="{{ q.onToggleReq }}" style="border: none; background: {{ q.requiredBg }}; color: {{ q.requiredColor }}; border-radius: 7px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;">{{ q.requiredLabel }}</button>
+                          <button onClick="{{ q.onRemove }}" title="Remove from form" style="border: none; background: transparent; color: #A1A1AA; cursor: pointer; padding: 6px; display: flex; flex-shrink: 0;" style-hover="{{ hoverDarken }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+
+                  <!-- question library -->
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 22px 24px;">
+                    <div style="font-size: 16px; font-weight: 700; margin-bottom: 3px;">Saved question library</div>
+                    <div style="font-size: 13px; color: #71717A; margin-bottom: 16px;">Reuse questions you've created before. <b>Carpool</b> and <b>dietary restrictions</b> are the most common — pre-select them in one tap.</div>
+                    <div style="display: flex; flex-direction: column; gap: 9px;">
+                      <sc-for list="{{ libRows }}" as="q" hint-placeholder-count="4">
+                        <div style="border: 1px solid #ECECEE; border-radius: 11px; padding: 12px 15px; display: flex; align-items: center; gap: 13px;">
+                          <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 14px; font-weight: 600; display: flex; gap: 8px; align-items: center;">{{ q.label }}<sc-if value="{{ q.common }}" hint-placeholder-val="{{ false }}"><span style="font-size: 10.5px; font-weight: 700; color: #1E7B4F; background: #E2EFE7; border-radius: 5px; padding: 2px 7px;">Common</span></sc-if></div>
+                            <div style="font-size: 12px; color: #A1A1AA; margin-top: 3px;">{{ q.typeLabel }}</div>
+                          </div>
+                          <button onClick="{{ q.onToggle }}" style="border: {{ q.btnBorder }}; background: {{ q.btnBg }}; color: {{ q.btnColor }}; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0;">{{ q.btnLabel }}</button>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+
+                  <!-- new question engine -->
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 22px 24px;">
+                    <div style="font-size: 16px; font-weight: 700; margin-bottom: 3px;">Create a new question</div>
+                    <div style="font-size: 13px; color: #71717A; margin-bottom: 16px;">Saved to your library and added to this form automatically.</div>
+                    <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Question</label>
+                    <textarea value="{{ nq.prompt }}" onInput="{{ setNqPrompt }}" rows="2" placeholder="e.g. Which workshop track are you most interested in?" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14px; resize: vertical; line-height: 1.5; margin-bottom: 16px;"></textarea>
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end;">
+                      <div>
+                        <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px;">Answer type</label>
+                        <select value="{{ nq.type }}" onChange="{{ setNqType }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14px; background: #fff;">
+                          <option value="text">Short text</option>
+                          <option value="textarea">Long text</option>
+                          <option value="choice">Single choice</option>
+                          <option value="yesno">Yes / No</option>
+                          <option value="number">Number</option>
+                        </select>
+                      </div>
+                      <button onClick="{{ toggleNqRequired }}" style="display: flex; align-items: center; gap: 9px; background: #fff; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 15px; font-size: 13.5px; font-weight: 600; cursor: pointer; height: 44px;">
+                        <span style="width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid {{ nqReqBorder }}; background: {{ nqReqBg }}; display: flex; align-items: center; justify-content: center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{ nqReqDot }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Required
+                      </button>
+                    </div>
+                    <sc-if value="{{ nqNeedsOptions }}" hint-placeholder-val="{{ false }}">
+                      <label style="display: block; font-size: 13px; font-weight: 700; margin: 16px 0 6px;">Choices <span style="font-weight: 500; color: #A1A1AA;">— one per line, or comma-separated</span></label>
+                      <textarea value="{{ nq.options }}" onInput="{{ setNqOptions }}" rows="3" placeholder="Option A&#10;Option B&#10;Option C" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14px; resize: vertical; line-height: 1.6;"></textarea>
+                    </sc-if>
+                    <button onClick="{{ addQuestion }}" style="margin-top: 18px; background: #CC0000; color: #fff; border: none; border-radius: 9px; padding: 12px 22px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; gap: 8px; align-items: center;" style-hover="{{ hoverDarken }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Save to library &amp; add</button>
+                  </div>
+
+                  <!-- terms templates -->
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 16px; padding: 22px 24px;">
+                    <div style="font-size: 16px; font-weight: 700; margin-bottom: 3px;">Terms &amp; conditions</div>
+                    <div style="font-size: 13px; color: #71717A; margin-bottom: 16px;">Pick approved templates students must agree to before the final Register button unlocks.</div>
+                    <div style="display: flex; flex-direction: column; gap: 11px;">
+                      <sc-for list="{{ termRows }}" as="t" hint-placeholder-count="4">
+                        <label style="display: flex; gap: 13px; align-items: flex-start; border: {{ t.boxBorder }}; background: {{ t.boxBg }}; border-radius: 12px; padding: 15px 17px; cursor: pointer;">
+                          <span style="width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid {{ t.checkBorder }}; background: {{ t.checkBg }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;"><sc-if value="{{ t.included }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if></span>
+                          <input type="checkbox" checked="{{ t.included }}" onChange="{{ t.onToggle }}" style="display: none;" />
+                          <span style="flex: 1;"><span style="display: block; font-size: 14.5px; font-weight: 700;">{{ t.name }}</span><span style="display: block; font-size: 12.5px; color: #71717A; margin-top: 2px; line-height: 1.45;">{{ t.summary }}</span></span>
+                        </label>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- LIVE PREVIEW -->
+                <div style="position: sticky; top: 80px;">
+                  <div style="font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #A1A1AA; margin-bottom: 10px;">STUDENT SEES THIS</div>
+                  <div style="background: #fff; border: 1px solid #E9E9EB; border-radius: 14px; box-shadow: 0 12px 34px rgba(0,0,0,.08); overflow: hidden;">
+                    <div style="padding: 18px 20px; border-bottom: 1px solid #ECECEE;">
+                      <div style="font-size: 11px; font-weight: 700; letter-spacing: .5px; color: #CC0000; text-transform: uppercase;">Event registration</div>
+                      <div style="font-size: 16px; font-weight: 800; margin-top: 2px;">Adulting 101: Money &amp; Taxes</div>
+                    </div>
+                    <div style="padding: 18px 20px; max-height: 460px; overflow-y: auto;">
+                      <sc-if value="{{ previewEmpty }}" hint-placeholder-val="{{ false }}">
+                        <div style="font-size: 12.5px; color: #A1A1AA; margin-bottom: 16px;">No questions — students go straight to terms.</div>
+                      </sc-if>
+                      <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <sc-for list="{{ previewQuestions }}" as="q" hint-placeholder-count="2">
+                          <div>
+                            <div style="font-size: 13px; font-weight: 600; margin-bottom: 7px; line-height: 1.35;">{{ q.prompt }}{{ q.reqMark }}</div>
+                            <sc-if value="{{ q.isText }}" hint-placeholder-val="{{ true }}"><div style="height: 36px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FAFAFA;"></div></sc-if>
+                            <sc-if value="{{ q.isChoice }}" hint-placeholder-val="{{ false }}">
+                              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                <sc-for list="{{ q.options }}" as="o" hint-placeholder-count="3"><span style="border: 1.5px solid #E4E4E7; border-radius: 999px; padding: 6px 12px; font-size: 12px; color: #71717A;">{{ o }}</span></sc-for>
+                              </div>
+                            </sc-if>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <div style="font-size: 11px; font-weight: 800; letter-spacing: .5px; color: #A1A1AA; text-transform: uppercase; margin: 20px 0 11px;">Terms &amp; agreements</div>
+                      <sc-if value="{{ hasPreviewTerms }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; flex-direction: column; gap: 9px;">
+                          <sc-for list="{{ previewTerms }}" as="t" hint-placeholder-count="1">
+                            <div style="display: flex; gap: 9px; align-items: center; border: 1px solid #ECECEE; border-radius: 9px; padding: 10px 13px;"><span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #C7C7CC; flex-shrink: 0;"></span><span style="font-size: 12.5px; font-weight: 600;">Agree to {{ t.name }}</span></div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ noPreviewTerms }}" hint-placeholder-val="{{ false }}">
+                        <div style="font-size: 12.5px; color: #A1A1AA;">No terms selected.</div>
+                      </sc-if>
+                      <div style="margin-top: 16px; background: #E4E4E7; color: #A1A1AA; border-radius: 9px; padding: 11px; text-align: center; font-size: 13.5px; font-weight: 700;">Complete registration</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+        </main>
+      </div>
+
+      <!-- REGISTRATION POPUP -->
+      <sc-if value="{{ regModalOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeReg }}" style="position: fixed; inset: 0; z-index: 95; background: rgba(20,20,20,.55); display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; animation: fadeIn .15s ease;">
+          <div onClick="{{ stopProp }}" style="width: 100%; max-width: 560px; background: #fff; border-radius: 16px; box-shadow: 0 30px 80px rgba(0,0,0,.4); overflow: hidden; animation: fadeUp .22s ease; margin: auto;">
+
+            <div style="padding: 22px 26px; border-bottom: 1px solid #ECECEE; display: flex; align-items: flex-start; gap: 14px;">
+              <div style="flex: 1;">
+                <div style="font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #CC0000; text-transform: uppercase;">{{ regTypeLabel }}</div>
+                <div style="font-size: 19px; font-weight: 800; margin-top: 3px; letter-spacing: -.3px; line-height: 1.25;">{{ regModalTitle }}</div>
+              </div>
+              <button onClick="{{ closeReg }}" style="background: #F4F4F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" style-hover="{{ hoverGray }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#52525B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+
+            <div style="max-height: 60vh; overflow-y: auto; padding: 22px 26px;">
+              <sc-if value="{{ hasRegQuestions }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size: 12px; font-weight: 800; letter-spacing: .5px; color: #71717A; text-transform: uppercase; margin-bottom: 16px;">A few quick questions</div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                  <sc-for list="{{ regQuestions }}" as="q" hint-placeholder-count="2">
+                    <div>
+                      <label style="display: block; font-size: 14.5px; font-weight: 600; margin-bottom: 8px; line-height: 1.4;">{{ q.prompt }}{{ q.reqMark }}</label>
+                      <sc-if value="{{ q.prefilled }}" hint-placeholder-val="{{ false }}">
+                        <div style="font-size: 11.5px; color: #1E7B4F; font-weight: 600; margin: -3px 0 9px; display: flex; gap: 5px; align-items: center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1E7B4F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{ q.prefillNote }}</div>
+                      </sc-if>
+                      <sc-if value="{{ q.isText }}" hint-placeholder-val="{{ false }}">
+                        <input value="{{ q.value }}" onInput="{{ q.onInput }}" placeholder="Type your answer" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px;" />
+                      </sc-if>
+                      <sc-if value="{{ q.isTextarea }}" hint-placeholder-val="{{ false }}">
+                        <textarea value="{{ q.value }}" onInput="{{ q.onInput }}" rows="3" placeholder="Type your answer" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px; resize: vertical; line-height: 1.5;"></textarea>
+                      </sc-if>
+                      <sc-if value="{{ q.isNumber }}" hint-placeholder-val="{{ false }}">
+                        <input type="number" value="{{ q.value }}" onInput="{{ q.onInput }}" style="width: 140px; border: 1px solid #D4D4D8; border-radius: 9px; padding: 11px 13px; font-size: 14.5px;" />
+                      </sc-if>
+                      <sc-if value="{{ q.isChoice }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                          <sc-for list="{{ q.options }}" as="o" hint-placeholder-count="3">
+                            <button onClick="{{ o.onClick }}" style="border: 1.5px solid {{ o.borderColor }}; background: {{ o.bg }}; color: {{ o.color }}; border-radius: 999px; padding: 9px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all .12s;">{{ o.label }}</button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: .5px; color: #71717A; text-transform: uppercase; margin: 26px 0 14px;">Terms &amp; agreements</div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <sc-for list="{{ regTerms }}" as="t" hint-placeholder-count="1">
+                  <div style="border: 1px solid #E9E9EB; border-radius: 12px; overflow: hidden;">
+                    <div style="padding: 12px 16px; background: #FAFAFA; border-bottom: 1px solid #ECECEE; font-size: 14px; font-weight: 700;">{{ t.name }}</div>
+                    <div style="max-height: 132px; overflow-y: auto; padding: 13px 16px;">{{ t.bodyNode }}</div>
+                    <label style="display: flex; gap: 11px; align-items: flex-start; padding: 13px 16px; border-top: 1px solid #ECECEE; cursor: pointer; background: {{ t.agreeBg }};">
+                      <input type="checkbox" checked="{{ t.agreed }}" onChange="{{ t.onToggle }}" style="margin-top: 1px; width: 18px; height: 18px; accent-color: #CC0000; flex-shrink: 0; cursor: pointer;" />
+                      <span style="font-size: 13.5px; font-weight: 600; line-height: 1.4;">I have read and agree to the {{ t.name }}.</span>
+                    </label>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="padding: 16px 26px; border-top: 1px solid #ECECEE; display: flex; gap: 12px; align-items: center;">
+              <button onClick="{{ closeReg }}" style="background: #fff; color: #52525B; border: 1px solid #D4D4D8; border-radius: 9px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="{{ hoverGray }}">Cancel</button>
+              <div style="flex: 1;"></div>
+              <button onClick="{{ submitReg }}" disabled="{{ regSubmitDisabled }}" style="background: {{ regSubmitBg }}; color: {{ regSubmitColor }}; border: none; border-radius: 9px; padding: 12px 24px; font-size: 14.5px; font-weight: 700; cursor: {{ regSubmitCursor }};">{{ regSubmitLabel }}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- TOAST -->
+      <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #1A1A1A; color: #fff; padding: 13px 22px; border-radius: 999px; font-size: 14px; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,.28); z-index: 90; display: flex; align-items: center; gap: 10px; animation: toastIn .25s ease;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ toastDotColor }};"></span>{{ toastMsg }}
+        </div>
+      </sc-if>
+
+      <!-- DEMO TIME MACHINE -->
+      <sc-if value="{{ showDemo }}" hint-placeholder-val="{{ false }}">
+        <div style="position: fixed; bottom: 22px; right: 22px; width: 320px; background: #141414; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.4); z-index: 80; overflow: hidden; animation: fadeUp .3s ease;">
+          <div onClick="{{ toggleDemo }}" style="display: flex; align-items: center; gap: 9px; padding: 14px 16px; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFC857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span style="color: #fff; font-size: 14px; font-weight: 700; flex: 1;">Demo Time Machine</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ demoChevron }}"/></svg>
+          </div>
+          <sc-if value="{{ demoExpanded }}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 0 16px 16px;">
+              <div style="background: rgba(255,255,255,.06); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: #71717A; font-weight: 600;">SIMULATED NOW</div>
+                <div style="font-size: 14px; color: #fff; font-weight: 600; margin-top: 2px;">{{ nowFull }}</div>
+              </div>
+              <div style="font-size: 11px; color: #71717A; font-weight: 700; letter-spacing: .5px; margin-bottom: 8px;">JUMP TO A MOMENT</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="3">
+                  <button onClick="{{ t.onClick }}" style="display: flex; gap: 11px; align-items: center; border-radius: 10px; padding: 11px 13px; cursor: pointer; text-align: left; background: {{ t.bg }}; border: 1px solid {{ t.borderColor }};">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; background: {{ t.dotColor }};"></span>
+                    <span style="flex: 1;"><span style="display: block; font-size: 13px; font-weight: 700; color: {{ t.titleColor }};">{{ t.title }}</span><span style="display: block; font-size: 11.5px; color: {{ t.subColor }};">{{ t.sub }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="margin-top: 12px; font-size: 11.5px; color: #8A8A8F; line-height: 1.5; border-top: 1px solid rgba(255,255,255,.08); padding-top: 11px;">{{ demoHint }}</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#CC0000&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showDemoPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  editorRef = React.createRef();
+
+  T_BEFORE = new Date('2026-04-08T12:00:00').getTime();
+  T_LOTTERY = new Date('2026-04-09T09:00:00').getTime();
+  T_RESULTS = new Date('2026-04-10T09:00:00').getTime();
+
+  state = {
+    page: 'login',
+    loggedIn: false,
+    role: 'student',
+    now: new Date('2026-04-09T09:00:00').getTime(),
+    selectedId: null,
+    editingId: null,
+    eventsFilter: 'all',
+    menuOpen: false,
+    notifOpen: false,
+    demoExpanded: true,
+    toast: null,
+    search: '',
+    catFilter: 'All',
+    defWindow: 1,
+    defMax: 3,
+    notifs: [],
+    folders: [
+      { id: 'spring', name: 'Spring 2026 — Live', goLive: '2026-01-15T08:00:00', window: 1, max: 3 },
+      { id: 'april', name: 'April 2026 Programs', goLive: '2026-04-09T08:00:00', window: 1, max: 3 },
+      { id: 'summer', name: 'Summer 2026 Programs', goLive: '2026-06-01T08:00:00', window: 2, max: 2 },
+    ],
+    events: [
+      { id: 'wellness', folderId: 'spring', title: 'Wolfpack Wellness Walk', code: 'WELL-101', category: 'Health & Wellness', location: 'Court of North Carolina (meet at Belltower)', date: '2026-04-15', time: '8:00 AM – 9:00 AM', seatsTotal: 50, seatsLeft: 31, entrants: 0, userWins: true, image: null, tint: '#E2EFE7', desc: '<p>Start your morning with a brisk guided walk around campus with WolfWellness. Open to all students, staff and faculty — no experience required.</p><h3>What to bring</h3><ul><li>Comfortable walking shoes</li><li>A water bottle</li><li>Your WolfPack One Card</li></ul><p>Walks step off promptly at 8:00 AM rain or shine.</p>' },
+      { id: 'studyabroad', folderId: 'spring', title: 'Study Abroad Info Session', code: 'GLOB-201', category: 'Global Engagement', location: 'Witherspoon Student Center 126', date: '2026-04-17', time: '4:00 PM – 5:00 PM', seatsTotal: 60, seatsLeft: 44, entrants: 0, userWins: true, image: null, tint: '#E2EAF2', desc: '<p>Thinking about a semester abroad? Learn about NC State\u2019s exchange programs, scholarships, and how credits transfer back.</p><h3>Topics covered</h3><ul><li>Choosing a program and destination</li><li>Financial aid &amp; scholarships</li><li>Application timeline</li></ul>' },
+      { id: 'careerfair', folderId: 'spring', title: 'Spring Career Fair Prep', code: 'CAR-110', category: 'Career', location: 'Hunt Library Auditorium', date: '2026-04-14', time: '1:00 PM – 3:00 PM', seatsTotal: 80, seatsLeft: 12, entrants: 0, userWins: true, image: null, tint: '#F4ECD9', desc: '<p>Get ready for the Spring Career Fair. Career coaches will review your elevator pitch and help you build a target employer list.</p>' },
+      { id: 'adulting', folderId: 'april', title: 'Adulting 101: Money & Taxes', code: 'EMAS-GTS-A', category: 'Personal Development', location: 'Talley Student Union 3210', date: '2026-04-22', time: '5:00 PM – 6:30 PM', seatsTotal: 30, seatsLeft: 8, entrants: 64, userWins: true, image: null, tint: '#F4E6E6', desc: '<p>Take control of your finances before you graduate. <strong>Adulting 101</strong> walks you through budgeting, building credit, and filing taxes for the first time.</p><h3>What you\u2019ll learn</h3><ul><li>Building a monthly budget that actually works</li><li>Understanding credit scores and how to build credit</li><li>Filing a simple federal &amp; NC state return</li></ul><p>Light refreshments provided. Bring a laptop if you have one.</p>' },
+      { id: 'career', folderId: 'april', title: 'Career Readiness Bootcamp', code: 'EMAS-GTS-CR', category: 'Career', location: 'Talley Student Union 4140', date: '2026-04-18', time: '2:00 PM – 4:00 PM', seatsTotal: 40, seatsLeft: 22, entrants: 28, userWins: true, image: null, tint: '#E2EAF2', desc: '<p>A hands-on bootcamp covering resumes, LinkedIn, and interview practice with employers from the Career Development Center.</p><h3>Agenda</h3><ul><li>Resume teardown &amp; rebuild</li><li>Mock interviews with live feedback</li><li>Networking that doesn\u2019t feel awkward</li></ul>' },
+      { id: 'community', folderId: 'april', title: 'Community Conversations', code: 'EMAS-GTS-CC', category: 'Civic Engagement', location: 'Talley Student Union 3285', date: '2026-04-25', time: '5:30 PM – 7:00 PM', seatsTotal: 25, seatsLeft: 5, entrants: 88, userWins: false, image: null, tint: '#F4ECD9', desc: '<p>Community Conversations are an opportunity for scholars to participate in facilitated dialogue about topics affecting North Carolina, the country, and the world.</p><h3>Goals</h3><ul><li>Provide a framework for civic conversations on campus</li><li>Cultivate a culture built on mutuality and respect</li><li>Build skills in critical thinking, empathy and self-awareness</li></ul>' },
+      { id: 'cooking', folderId: 'april', title: 'Cooking on a Budget', code: 'EMAS-GTS-CO', category: 'Personal Development', location: 'Fountain Dining Teaching Kitchen', date: '2026-04-20', time: '6:00 PM – 7:30 PM', seatsTotal: 20, seatsLeft: 12, entrants: 12, userWins: true, image: null, tint: '#E2EFE7', desc: '<p>Learn to cook three cheap, healthy meals you can make in a dorm or first apartment. You\u2019ll cook and eat together.</p><p>All ingredients and equipment provided. Please note any allergies at check-in.</p>' },
+      { id: 'investing', folderId: 'april', title: 'Intro to Investing', code: 'EMAS-GTS-IN', category: 'Personal Development', location: 'Nelson Hall 1130', date: '2026-04-24', time: '5:00 PM – 6:00 PM', seatsTotal: 30, seatsLeft: 18, entrants: 41, userWins: false, image: null, tint: '#E2EAF2', desc: '<p>A plain-English intro to investing: index funds, retirement accounts, and how compound interest works in your favor when you start early.</p>' },
+      { id: 'research', folderId: 'summer', title: 'Summer Research Symposium', code: 'SUM-300', category: 'Research', location: 'Hunt Library', date: '2026-06-20', time: '10:00 AM – 2:00 PM', seatsTotal: 100, seatsLeft: 100, entrants: 0, userWins: true, image: null, tint: '#F4E6E6', desc: '<p>Undergraduate researchers present summer projects across all colleges. Open to all students.</p>' },
+      { id: 'internship', folderId: 'summer', title: 'Internship Prep Series', code: 'SUM-310', category: 'Career', location: 'Online (Zoom)', date: '2026-06-15', time: '12:00 PM – 1:00 PM', seatsTotal: 75, seatsLeft: 75, entrants: 0, userWins: true, image: null, tint: '#F4ECD9', desc: '<p>A three-part virtual series to help you land and succeed in a summer internship.</p>' },
+    ],
+    registrations: [
+      { eventId: 'studyabroad', type: 'fcfs', status: 'confirmed' },
+      { eventId: 'careerfair', type: 'fcfs', status: 'confirmed' },
+    ],
+    form: { title: '', code: '', category: 'Personal Development', folderId: 'april', date: '2026-04-22', time: '5:00 PM – 6:30 PM', location: '', seats: 30, image: null, formQ: [
+      { id: 'carpool', label: 'Carpool & transportation', prompt: 'Are you able to carpool, or do you need a ride to this event?', type: 'choice', options: ['I can drive and offer seats', 'I need a ride', 'I have my own transportation'], required: true, source: 'lib' },
+      { id: 'food', label: 'Dietary restrictions', prompt: 'Do you have any food allergies or dietary restrictions we should know about?', type: 'text', options: [], required: false, source: 'lib' },
+    ], formTerms: ['conduct'], tags: ['All cohorts'] },
+    nf: { name: '', goLive: '2026-09-01', time: '08:00', window: 1, max: 3 },
+    tagDraft: '',
+    cohortsExpanded: false,
+    formExpanded: false,
+    ocqOpen: false,
+    ocq: { prompt: '', type: 'text', options: '', required: false },
+
+    // ----- registration popup: form engine + terms + saved answers -----
+    questionLibrary: [
+      { id: 'carpool', label: 'Carpool & transportation', prompt: 'Are you able to carpool, or do you need a ride to this event?', type: 'choice', options: ['I can drive and offer seats', 'I need a ride', 'I have my own transportation'], required: true, common: true },
+      { id: 'food', label: 'Dietary restrictions', prompt: 'Do you have any food allergies or dietary restrictions we should know about?', type: 'text', options: [], required: false, common: true },
+      { id: 'tshirt', label: 'T-shirt size', prompt: 'What is your t-shirt size?', type: 'choice', options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], required: false, common: false },
+      { id: 'accommodations', label: 'Accessibility needs', prompt: 'Do you require any accessibility accommodations to participate?', type: 'textarea', options: [], required: false, common: false },
+    ],
+    termsTemplates: [
+      { id: 'conduct', name: 'Student Code of Conduct', summary: 'Standard behavior expectations for NC State programs.', body: '<p>By registering you agree to abide by the NC&nbsp;State University Code of Student Conduct for the duration of this program.</p><ul><li>Treat facilitators, staff and fellow participants with respect.</li><li>Arrive on time and stay for the full session.</li><li>Follow all facility and safety guidelines.</li></ul>' },
+      { id: 'media', name: 'Photo & Media Release', summary: 'Permission to use photos / video from the event.', body: '<p>I grant NC&nbsp;State University permission to photograph and record me during this event and to use those images for promotional and educational purposes without compensation.</p>' },
+      { id: 'liability', name: 'Liability Waiver', summary: 'Assumption of risk for physical-activity events.', body: '<p>I acknowledge that participation is voluntary and I assume all risks associated with this activity. I release NC&nbsp;State University from liability for any injury sustained during the event.</p>' },
+      { id: 'cancellation', name: 'Cancellation & No-Show Policy', summary: 'Rules for cancelling or missing a registered event.', body: '<p>If you can no longer attend, please cancel at least 24 hours in advance so your seat can be released to a waitlisted student. Repeated no-shows may affect future lottery eligibility.</p>' },
+    ],
+    formConfig: { questions: ['carpool', 'food'], terms: ['conduct'] },
+    studentAnswers: {},
+    nq: { prompt: '', type: 'text', options: '', required: true },
+    regModal: null,
+  };
+
+  // ---------- helpers ----------
+  RED() { return this.props.accentColor || '#CC0000'; }
+  folder(id) { return this.state.folders.find(f => f.id === id); }
+  evt(id) { return this.state.events.find(e => e.id === id); }
+  regOf(id) { return this.state.registrations.find(r => r.eventId === id); }
+
+  phaseAt(ev, ts) {
+    const f = this.folder(ev.folderId);
+    if (!f) return 'open';
+    const go = new Date(f.goLive).getTime();
+    const end = go + f.window * 86400000;
+    if (ts < go) return 'upcoming';
+    if (ts < end) return 'lottery';
+    return 'open';
+  }
+  phaseOf(ev) { return this.phaseAt(ev, this.state.now); }
+
+  fmtDate(iso) { return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); }
+  fmtShort(iso) { return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+
+  lotteryCount(folderId) {
+    return this.state.registrations.filter(r => r.type === 'lottery' && (r.status === 'pending' || r.status === 'won') && this.evt(r.eventId) && this.evt(r.eventId).folderId === folderId).length;
+  }
+
+  toast(msg, kind) {
+    const id = Date.now();
+    this._toastId = id;
+    this.setState({ toast: { msg, kind: kind || 'ok' } });
+    setTimeout(() => { if (this._toastId === id) this.setState({ toast: null }); }, 2600);
+  }
+
+  imgStyleFor(ev) {
+    if (ev.image) return { background: 'url(' + ev.image + ') center/cover' };
+    return { background: ev.tint + ', repeating-linear-gradient(135deg, rgba(0,0,0,.035) 0 1px, transparent 1px 11px)', backgroundColor: ev.tint };
+  }
+
+  // ---------- registration popup (form engine + terms) ----------
+  componentDidMount() {
+    try {
+      const a = localStorage.getItem('reporter_answers');
+      if (a) { const parsed = JSON.parse(a); if (parsed && typeof parsed === 'object') this.setState({ studentAnswers: parsed }); }
+    } catch (e) {}
+  }
+  persistAnswers(obj) { try { localStorage.setItem('reporter_answers', JSON.stringify(obj)); } catch (e) {} }
+
+  activeQuestions() { return this.state.formConfig.questions.map(id => this.state.questionLibrary.find(q => q.id === id)).filter(Boolean); }
+  activeTerms() { return this.state.formConfig.terms.map(id => this.state.termsTemplates.find(t => t.id === id)).filter(Boolean); }
+  qOptions(q) { return q.type === 'yesno' ? ['Yes', 'No'] : (q.options || []); }
+
+  openReg = (eventId, type) => {
+    if (this.regOf(eventId)) return;
+    const answers = {};
+    this.activeQuestions().forEach(q => { answers[q.id] = this.state.studentAnswers[q.id] != null ? this.state.studentAnswers[q.id] : ''; });
+    this.setState({ regModal: { eventId, type, answers, agreed: {} } });
+  };
+  closeReg = () => this.setState({ regModal: null });
+  setRegAnswer = (qid, val) => this.setState(s => ({ regModal: { ...s.regModal, answers: { ...s.regModal.answers, [qid]: val } } }));
+  toggleAgree = (tid) => this.setState(s => ({ regModal: { ...s.regModal, agreed: { ...s.regModal.agreed, [tid]: !s.regModal.agreed[tid] } } }));
+  submitReg = () => {
+    const m = this.state.regModal; if (!m) return;
+    const qs = this.activeQuestions();
+    for (const q of qs) { if (q.required && !(m.answers[q.id] && String(m.answers[q.id]).trim())) { this.toast('Please answer: ' + q.label, 'warn'); return; } }
+    if (!this.activeTerms().every(t => m.agreed[t.id])) { this.toast('Please agree to all terms to continue', 'warn'); return; }
+    const merged = { ...this.state.studentAnswers };
+    qs.forEach(q => { const v = m.answers[q.id]; if (v != null && String(v).trim()) merged[q.id] = v; });
+    const type = m.type, eventId = m.eventId;
+    this.setState({ studentAnswers: merged, regModal: null });
+    this.persistAnswers(merged);
+    if (type === 'fcfs') this.registerFcfs(eventId); else this.enterLottery(eventId);
+  };
+
+  // ---------- admin: registration form builder ----------
+  toggleFormQuestion = (qid) => this.setState(s => { const inc = s.formConfig.questions.includes(qid); return { formConfig: { ...s.formConfig, questions: inc ? s.formConfig.questions.filter(x => x !== qid) : [...s.formConfig.questions, qid] } }; });
+  toggleFormTerm = (tid) => this.setState(s => { const inc = s.formConfig.terms.includes(tid); return { formConfig: { ...s.formConfig, terms: inc ? s.formConfig.terms.filter(x => x !== tid) : [...s.formConfig.terms, tid] } }; });
+  toggleQuestionRequired = (qid) => this.setState(s => ({ questionLibrary: s.questionLibrary.map(q => q.id === qid ? { ...q, required: !q.required } : q) }));
+  setNq = (k) => (e) => { const v = e.target.value; this.setState(s => ({ nq: { ...s.nq, [k]: v } })); };
+  setNqPrompt = this.setNq('prompt'); setNqType = this.setNq('type'); setNqOptions = this.setNq('options');
+  toggleNqRequired = () => this.setState(s => ({ nq: { ...s.nq, required: !s.nq.required } }));
+  addQuestion = () => {
+    const nq = this.state.nq;
+    if (!nq.prompt.trim()) { this.toast('Write the question first', 'warn'); return; }
+    let opts = [];
+    if (nq.type === 'choice') { opts = nq.options.split(/[\n,]/).map(o => o.trim()).filter(Boolean); if (opts.length < 2) { this.toast('Add at least two options', 'warn'); return; } }
+    const id = 'q' + Date.now();
+    const label = nq.prompt.length > 34 ? nq.prompt.slice(0, 32).trim() + '\u2026' : nq.prompt.trim();
+    const q = { id, label, prompt: nq.prompt.trim(), type: nq.type, options: opts, required: nq.required, common: false };
+    this.setState(s => ({ questionLibrary: [...s.questionLibrary, q], formConfig: { ...s.formConfig, questions: [...s.formConfig.questions, id] }, nq: { prompt: '', type: 'text', options: '', required: true } }));
+    this.toast('Question saved to library & added to the form', 'ok');
+  };
+
+  // ---------- nav / auth ----------
+  go = (page, id) => this.setState({ page, selectedId: id || null, menuOpen: false, notifOpen: false });
+  loginStudent = () => this.setState({ loggedIn: true, role: 'student', page: 'home' });
+  loginGuest = () => this.setState({ loggedIn: true, role: 'student', page: 'home' });
+  loginAdmin = () => this.setState({ loggedIn: true, role: 'admin', page: 'admin' });
+  logout = () => this.setState({ loggedIn: false, page: 'login', menuOpen: false });
+  switchRole = () => { const r = this.state.role === 'admin' ? 'student' : 'admin'; this.setState({ role: r, page: r === 'admin' ? 'admin' : 'home', menuOpen: false }); };
+  toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen, notifOpen: false }));
+  toggleNotif = () => this.setState(s => ({ notifOpen: !s.notifOpen, menuOpen: false }));
+  toggleDemo = () => this.setState(s => ({ demoExpanded: !s.demoExpanded }));
+  clearNotif = () => this.setState({ notifs: [] });
+  onSearch = (e) => this.setState({ search: e.target.value });
+
+  // ---------- registration ----------
+  enterLottery = (id) => {
+    const ev = this.evt(id); const f = this.folder(ev.folderId);
+    if (this.regOf(id)) return;
+    if (this.lotteryCount(ev.folderId) >= f.max) { this.toast('Lottery limit reached — max ' + f.max + ' entries this window', 'warn'); return; }
+    this.setState(s => ({ registrations: [...s.registrations, { eventId: id, type: 'lottery', status: 'pending' }] }));
+    this.toast('Entered the lottery for ' + ev.title, 'ok');
+  };
+  registerFcfs = (id) => {
+    const ev = this.evt(id);
+    if (this.regOf(id) || ev.seatsLeft <= 0) return;
+    this.setState(s => ({
+      registrations: [...s.registrations, { eventId: id, type: 'fcfs', status: 'confirmed' }],
+      events: s.events.map(e => e.id === id ? { ...e, seatsLeft: e.seatsLeft - 1 } : e),
+    }));
+    this.toast('Registered for ' + ev.title, 'ok');
+  };
+  joinWaitlist = (id) => {
+    const ev = this.evt(id);
+    if (this.regOf(id)) return;
+    const pos = Math.floor(Math.random() * 9) + 2;
+    this.setState(s => ({ registrations: [...s.registrations, { eventId: id, type: 'waitlist', status: 'waitlist', pos }] }));
+    this.toast('Added to the waitlist for ' + ev.title + ' · #' + pos, 'ok');
+  };
+  cancelReg = (id) => {
+    const reg = this.regOf(id); const ev = this.evt(id);
+    const freed = reg && (reg.status === 'confirmed' || reg.status === 'won');
+    this.setState(s => ({
+      registrations: s.registrations.filter(r => r.eventId !== id),
+      events: freed ? s.events.map(e => e.id === id ? { ...e, seatsLeft: e.seatsLeft + 1 } : e) : s.events,
+    }));
+    this.toast('Removed ' + ev.title, 'warn');
+  };
+
+  // ---------- time machine / draw ----------
+  setNow = (ts) => {
+    const prev = this.state.now;
+    let regs = this.state.registrations.map(r => ({ ...r }));
+    let events = this.state.events.map(e => ({ ...e }));
+    let notifs = [...this.state.notifs];
+    let drew = 0;
+
+    // Fill pass: when a lottery window closes, seats are allocated.
+    // If applicants <= seats, EVERYONE who applied gets in and any extra seats
+    // remain open (FCFS). If oversubscribed, the event fills completely (0 left)
+    // and only then can an applicant be turned away.
+    events.forEach(ev => {
+      const opensNow = this.phaseAt(ev, prev) !== 'open' && this.phaseAt(ev, ts) === 'open';
+      if (opensNow && ev.entrants > 0) {
+        const userEntered = regs.some(r => r.eventId === ev.id && r.type === 'lottery');
+        const demand = ev.entrants + (userEntered ? 1 : 0);
+        if (demand <= ev.seatsTotal) { ev.seatsLeft = ev.seatsTotal - demand; ev._allIn = true; }
+        else { ev.seatsLeft = 0; ev._allIn = false; }
+      }
+    });
+
+    // Resolve the student's own lottery entries.
+    // Wins become confirmed seats; losses are dropped from "My events" (the
+    // student still gets a notification and can waitlist from the catalog).
+    regs = regs.filter(r => {
+      if (r.type === 'lottery' && r.status === 'pending') {
+        const ev = events.find(e => e.id === r.eventId);
+        if (this.phaseAt(ev, ts) === 'open') {
+          // You only miss out if the event was oversubscribed (now full) AND you weren't drawn.
+          const gotIn = ev._allIn || ev.userWins;
+          if (gotIn) {
+            r.status = 'won'; drew++;
+            notifs.unshift({ kind: 'win', title: 'You got a spot!', body: 'Your lottery entry for ' + ev.title + ' was selected.', icon: 'M20 6 9 17l-5-5', bg: '#E2EFE7', color: '#1E7B4F' });
+            return true;
+          } else {
+            drew++;
+            notifs.unshift({ kind: 'lose', title: 'Not selected this time', body: ev.title + ' filled in the lottery and is now full. Join the waitlist from the catalog if you still want a seat.', icon: 'M18 6 6 18M6 6l12 12', bg: '#FBE3E3', color: '#CC0000' });
+            return false;
+          }
+        }
+      }
+      return true;
+    });
+    this.setState({ now: ts, registrations: regs, events, notifs, notifOpen: drew > 0 ? true : this.state.notifOpen });
+    if (drew > 0) this.toast('Lottery drawn — ' + drew + ' result' + (drew > 1 ? 's' : '') + ' posted', 'ok');
+  };
+
+  // ---------- create form ----------
+  setF = (k) => (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, [k]: v } })); };
+  setTitle = this.setF('title'); setCode = this.setF('code'); setCategory = this.setF('category');
+  setDate = this.setF('date'); setTime = this.setF('time'); setLocation = this.setF('location');
+  setSeats = this.setF('seats'); setFolder = this.setF('folderId');
+
+  // ---------- create form: cohorts + per-event registration form builder ----------
+  toggleFormPanel = () => this.setState(s => ({ formExpanded: !s.formExpanded }));
+  libIncluded = (id) => this.state.form.formQ.some(q => q.source === 'lib' && q.id === id);
+  toggleLibQ = (id) => this.setState(s => {
+    if (s.form.formQ.some(q => q.source === 'lib' && q.id === id)) return { form: { ...s.form, formQ: s.form.formQ.filter(q => !(q.source === 'lib' && q.id === id)) } };
+    const lib = s.questionLibrary.find(q => q.id === id); if (!lib) return {};
+    return { form: { ...s.form, formQ: [...s.form.formQ, { id: lib.id, label: lib.label, prompt: lib.prompt, type: lib.type, options: lib.options, required: lib.required, source: 'lib' }] } };
+  });
+  removeFormQ = (qid) => this.setState(s => ({ form: { ...s.form, formQ: s.form.formQ.filter(q => q.id !== qid) } }));
+  toggleFormQReq = (qid) => this.setState(s => ({ form: { ...s.form, formQ: s.form.formQ.map(q => q.id === qid ? { ...q, required: !q.required } : q) } }));
+  toggleFormTerm = (id) => this.setState(s => { const inc = s.form.formTerms.includes(id); return { form: { ...s.form, formTerms: inc ? s.form.formTerms.filter(x => x !== id) : [...s.form.formTerms, id] } }; });
+  toggleOcq = () => this.setState(s => ({ ocqOpen: !s.ocqOpen }));
+  setOcq = (k) => (e) => { const v = e.target.value; this.setState(s => ({ ocq: { ...s.ocq, [k]: v } })); };
+  setOcqPrompt = this.setOcq('prompt'); setOcqType = this.setOcq('type'); setOcqOptions = this.setOcq('options');
+  toggleOcqReq = () => this.setState(s => ({ ocq: { ...s.ocq, required: !s.ocq.required } }));
+  addOnce = () => {
+    const o = this.state.ocq;
+    if (!o.prompt.trim()) { this.toast('Write the question first', 'warn'); return; }
+    let opts = [];
+    if (o.type === 'choice') { opts = o.options.split(/[\n,]/).map(x => x.trim()).filter(Boolean); if (opts.length < 2) { this.toast('Add at least two options', 'warn'); return; } }
+    const label = o.prompt.length > 34 ? o.prompt.slice(0, 32).trim() + '\u2026' : o.prompt.trim();
+    const q = { id: 'once' + Date.now(), label, prompt: o.prompt.trim(), type: o.type, options: opts, required: o.required, source: 'once' };
+    this.setState(s => ({ form: { ...s.form, formQ: [...s.form.formQ, q] }, ocq: { prompt: '', type: 'text', options: '', required: false }, ocqOpen: false }));
+    this.toast('One-time question added to this event', 'ok');
+  };
+  toggleTag = (t) => this.setState(s => { const inc = s.form.tags.includes(t); return { form: { ...s.form, tags: inc ? s.form.tags.filter(x => x !== t) : [...s.form.tags, t] } }; });
+  toggleCohorts = () => this.setState(s => ({ cohortsExpanded: !s.cohortsExpanded }));
+  setTagDraft = (e) => this.setState({ tagDraft: e.target.value });
+  addTag = () => { const t = this.state.tagDraft.trim(); if (!t) return; this.setState(s => ({ form: s.form.tags.includes(t) ? s.form : { ...s.form, tags: [...s.form.tags, t] }, tagDraft: '' })); };
+  onTagKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addTag(); } };
+  onFile = (e) => { const file = e.target.files && e.target.files[0]; if (!file) return; const rd = new FileReader(); rd.onload = () => this.setState(s => ({ form: { ...s.form, image: rd.result } })); rd.readAsDataURL(file); };
+
+  exec = (cmd, val) => () => { document.execCommand(cmd, false, val || null); if (this.editorRef.current) this.editorRef.current.focus(); };
+  rteLink = () => { const url = window.prompt('Link URL:', 'https://'); if (url) { document.execCommand('createLink', false, url); } if (this.editorRef.current) this.editorRef.current.focus(); };
+  rteImg = () => { if (this.editorRef.current) this.editorRef.current.focus(); document.execCommand('insertHTML', false, '<img src="https://via.placeholder.com/0" style="display:block;height:120px;width:100%;background:repeating-linear-gradient(135deg,#eee 0 8px,#e0e0e0 8px 16px);border-radius:8px;" alt="image placeholder" />'); };
+
+  // ---------- edit existing events / manage events tab ----------
+  componentDidUpdate() {
+    if (this._descPending !== undefined && this.editorRef.current) {
+      this.editorRef.current.innerHTML = this._descPending;
+      this._descPending = undefined;
+    }
+  }
+  defaultForm() {
+    return { title: '', code: '', category: 'Personal Development', folderId: 'april', date: '2026-04-22', time: '5:00 PM – 6:30 PM', location: '', seats: 30, image: null, formQ: [
+      { id: 'carpool', label: 'Carpool & transportation', prompt: 'Are you able to carpool, or do you need a ride to this event?', type: 'choice', options: ['I can drive and offer seats', 'I need a ride', 'I have my own transportation'], required: true, source: 'lib' },
+      { id: 'food', label: 'Dietary restrictions', prompt: 'Do you have any food allergies or dietary restrictions we should know about?', type: 'text', options: [], required: false, source: 'lib' },
+    ], formTerms: ['conduct'], tags: ['All cohorts'] };
+  }
+  startCreate = () => { this._descPending = ''; this.setState({ page: 'admin-create', editingId: null, ocqOpen: false, formExpanded: false, cohortsExpanded: false, menuOpen: false, notifOpen: false, form: this.defaultForm() }); };
+  editEvent = (id) => {
+    const ev = this.evt(id); if (!ev) return;
+    this._descPending = ev.desc || '';
+    const rf = ev.regForm;
+    const formQ = (rf && rf.questions && rf.questions.length !== undefined) ? rf.questions.map(q => ({ ...q })) : this.defaultForm().formQ;
+    const formTerms = (rf && rf.terms) ? [...rf.terms] : ['conduct'];
+    const tags = (ev.tags && ev.tags.length) ? [...ev.tags] : ['All cohorts'];
+    this.setState({ page: 'admin-create', editingId: id, ocqOpen: false, formExpanded: false, cohortsExpanded: false, menuOpen: false, notifOpen: false,
+      form: { title: ev.title, code: ev.code, category: ev.category, folderId: ev.folderId, date: ev.date, time: ev.time, location: ev.location, seats: ev.seatsTotal, image: ev.image, formQ, formTerms, tags } });
+  };
+  goEvents = (folderId) => this.setState({ page: 'admin-events', eventsFilter: folderId || 'all', menuOpen: false, notifOpen: false });
+  setEventsFilter = (id) => this.setState({ eventsFilter: id });
+
+  saveEvent = () => {
+    const f = this.state.form;
+    if (!f.title.trim()) { this.toast('Add an event title first', 'warn'); return; }
+    const desc = this.editorRef.current ? this.editorRef.current.innerHTML : '';
+    const editingId = this.state.editingId;
+    if (editingId) {
+      const newTotal = +f.seats || 30;
+      this.setState(s => ({
+        events: s.events.map(e => e.id === editingId ? { ...e, folderId: f.folderId, title: f.title, code: f.code || e.code, category: f.category, location: f.location || 'TBD', date: f.date, time: f.time, seatsTotal: newTotal, seatsLeft: Math.min(e.seatsLeft, newTotal), image: f.image, desc: desc || e.desc, tags: [...f.tags], regForm: { questions: f.formQ.map(q => ({ ...q })), terms: [...f.formTerms] } } : e),
+        page: 'admin-events', eventsFilter: f.folderId, editingId: null,
+      }));
+      this.toast('Changes saved', 'ok');
+      return;
+    }
+    const id = 'ev' + Date.now();
+    const tints = ['#F4E6E6', '#E2EAF2', '#E2EFE7', '#F4ECD9'];
+    const ev = { id, folderId: f.folderId, title: f.title, code: f.code || 'NEW-001', category: f.category, location: f.location || 'TBD', date: f.date, time: f.time, seatsTotal: +f.seats || 30, seatsLeft: +f.seats || 30, entrants: 0, userWins: true, image: f.image, tint: tints[this.state.events.length % 4], desc: desc || '<p>Details coming soon.</p>', tags: [...f.tags], regForm: { questions: f.formQ.map(q => ({ ...q })), terms: [...f.formTerms] } };
+    const folderName = this.folder(f.folderId).name;
+    this._descPending = '';
+    this.setState(s => ({ events: [...s.events, ev], page: 'admin', form: this.defaultForm() }));
+    this.toast('Published to ' + folderName, 'ok');
+  };
+
+  // ---------- folder editing ----------
+  updFolder = (id, k, v) => this.setState(s => ({ folders: s.folders.map(f => f.id === id ? { ...f, [k]: v } : f) }));
+  setFolderDate = (id, cur) => (e) => { const time = cur.split('T')[1] || '08:00:00'; this.updFolder(id, 'goLive', e.target.value + 'T' + time); };
+  setFolderTime = (id, cur) => (e) => { const date = cur.split('T')[0]; let t = e.target.value; if (t.length === 5) t += ':00'; this.updFolder(id, 'goLive', date + 'T' + t); };
+  setNf = (k) => (e) => { const v = e.target.value; this.setState(s => ({ nf: { ...s.nf, [k]: v } })); };
+  setNfName = this.setNf('name'); setNfDate = this.setNf('goLive'); setNfTime = this.setNf('time'); setNfWindow = this.setNf('window'); setNfMax = this.setNf('max');
+  addFolder = () => {
+    const nf = this.state.nf;
+    if (!nf.name.trim()) { this.toast('Name the folder first', 'warn'); return; }
+    let t = nf.time || '08:00'; if (t.length === 5) t += ':00';
+    const id = 'f' + Date.now();
+    this.setState(s => ({ folders: [...s.folders, { id, name: nf.name, goLive: nf.goLive + 'T' + t, window: +nf.window || 1, max: +nf.max || 3 }], nf: { name: '', goLive: '2026-09-01', time: '08:00', window: 1, max: 3 } }));
+    this.toast('Folder created', 'ok');
+  };
+  setDefWindow = (e) => { const v = e.target.value; this.setState({ defWindow: v }); };
+  setDefMax = (e) => { const v = e.target.value; this.setState({ defMax: v }); };
+
+  // ---------- view models ----------
+  cardVM(ev) {
+    const RED = this.RED();
+    const phase = this.phaseOf(ev);
+    const reg = this.regOf(ev.id);
+    const f = this.folder(ev.folderId);
+    const badge = { lottery: { background: '#FCEFDD', color: '#B45309' }, open: { background: '#E2EFE7', color: '#1E7B4F' }, upcoming: { background: '#EDEDEF', color: '#6F7271' } };
+    const phaseLabelMap = { lottery: 'Lottery open', open: 'Open registration', upcoming: 'Opens ' + this.fmtShort(f.goLive.split('T')[0]) };
+    const total = ev.seatsTotal || 1;
+    const filledPct = Math.round(((total - ev.seatsLeft) / total) * 100);
+    const ratioLeft = ev.seatsLeft / total;
+    const seatColor = ev.seatsLeft <= 0 ? '#CC0000' : ratioLeft <= 0.2 ? '#B45309' : '#1E7B4F';
+
+    const REDBTN = { background: RED, color: '#fff' };
+    const GHOST = { background: '#fff', color: '#52525B', border: '1px solid #D4D4D8' };
+    const DIS = { background: '#E4E4E7', color: '#A1A1AA', cursor: 'not-allowed' };
+    const GREENBADGE = { background: '#E2EFE7', color: '#1E7B4F' };
+    const AMBERBADGE = { background: '#FCEFDD', color: '#B45309' };
+    const REDBADGE = { background: '#FBE3E3', color: '#CC0000' };
+    const WAITBTN = { background: '#1A1A1A', color: '#fff' };
+    const WAITBADGE = { background: '#FEF6C9', color: '#A16207' };
+
+    let actionLabel = '', actionStyle = DIS, actionDisabled = true, onAction = () => {};
+    let statusLabel = null, statusStyle = null, hasStatus = false;
+    let showCancel = false, cancelLabel = '', onCancel = () => {};
+    let actionHint = '';
+
+    if (reg) {
+      hasStatus = true;
+      if (reg.status === 'confirmed') {
+        statusLabel = 'Registered'; statusStyle = GREENBADGE;
+        actionLabel = 'Registered'; actionStyle = { background: '#E2EFE7', color: '#1E7B4F', cursor: 'default' }; actionDisabled = true;
+        showCancel = true; cancelLabel = 'Cancel registration'; onCancel = () => this.cancelReg(ev.id);
+        actionHint = 'You have a confirmed seat for this event.';
+      } else if (reg.status === 'pending') {
+        statusLabel = 'Lottery entry pending'; statusStyle = AMBERBADGE;
+        actionLabel = 'Entry submitted'; actionStyle = { background: '#FCEFDD', color: '#B45309', cursor: 'default' }; actionDisabled = true;
+        showCancel = true; cancelLabel = 'Withdraw entry'; onCancel = () => this.cancelReg(ev.id);
+        actionHint = 'When the window closes a random draw decides seats — you\u2019ll be notified.';
+      } else if (reg.status === 'won') {
+        statusLabel = 'Registered'; statusStyle = GREENBADGE;
+        actionLabel = 'Registered'; actionStyle = { background: '#E2EFE7', color: '#1E7B4F', cursor: 'default' }; actionDisabled = true;
+        actionLabel = 'Registered'; actionStyle = { background: '#E2EFE7', color: '#1E7B4F', cursor: 'default' }; actionDisabled = true;
+        showCancel = true; cancelLabel = 'Cancel registration'; onCancel = () => this.cancelReg(ev.id);
+        actionHint = 'You were selected in the lottery — your seat is confirmed.';
+      } else if (reg.status === 'waitlist') {
+        statusLabel = 'Waitlisted · #' + (reg.pos || '—'); statusStyle = WAITBADGE;
+        actionLabel = 'On the waitlist'; actionStyle = { background: '#F4F4F5', color: '#52525B', cursor: 'default' }; actionDisabled = true;
+        showCancel = true; cancelLabel = 'Leave waitlist'; onCancel = () => this.cancelReg(ev.id);
+        actionHint = 'You’re #' + (reg.pos || '—') + ' in line. We’ll email you if a seat opens up.';
+      } else if (reg.status === 'lost') {
+        statusLabel = 'Not selected'; statusStyle = REDBADGE;
+        if (phase === 'open' && ev.seatsLeft > 0) { actionLabel = 'Register (open seats)'; actionStyle = REDBTN; actionDisabled = false; onAction = () => this.openReg(ev.id, 'fcfs'); actionHint = ev.seatsLeft + ' seats are now first-come, first-served.'; }
+        else { actionLabel = 'Join waitlist'; actionStyle = WAITBTN; actionDisabled = false; onAction = () => this.joinWaitlist(ev.id); actionHint = 'This event filled in the lottery — join the waitlist for a chance at a released seat.'; }
+      }
+    } else {
+      if (phase === 'lottery') {
+        const cap = this.lotteryCount(ev.folderId) >= f.max;
+        if (cap) { actionLabel = 'Lottery limit reached'; actionStyle = DIS; actionDisabled = true; actionHint = 'You\u2019ve used all ' + f.max + ' lottery entries for this folder.'; }
+        else { actionLabel = 'Enter lottery'; actionStyle = REDBTN; actionDisabled = false; onAction = () => this.openReg(ev.id, 'lottery'); actionHint = 'Enter now — a random draw assigns seats when the window closes.'; }
+      } else if (phase === 'open') {
+        if (ev.seatsLeft > 0) { actionLabel = 'Register'; actionStyle = REDBTN; actionDisabled = false; onAction = () => this.openReg(ev.id, 'fcfs'); actionHint = 'First-come, first-served. No limit on registrations.'; }
+        else { actionLabel = 'Join waitlist'; actionStyle = WAITBTN; actionDisabled = false; onAction = () => this.joinWaitlist(ev.id); actionHint = 'This event is full — join the waitlist and we’ll notify you if a seat opens.'; }
+      } else {
+        actionLabel = 'Not yet released'; actionStyle = DIS; actionDisabled = true; actionHint = 'Opens ' + this.fmtDate(f.goLive.split('T')[0]) + '.';
+      }
+    }
+
+    const _stop = (fn) => (e) => { if (e && e.stopPropagation) e.stopPropagation(); if (fn) fn(); };
+    onAction = _stop(onAction);
+    onCancel = _stop(onCancel);
+
+    const imgBgValue = ev.image ? ('url(' + ev.image + ') center/cover no-repeat') : ('repeating-linear-gradient(135deg, rgba(0,0,0,.05) 0 1px, transparent 1px 11px), ' + ev.tint);
+
+    // Lottery phase: show odds of selection (seats ÷ applicants) instead of seats filled.
+    const isLottery = phase === 'lottery';
+    const applicants = ev.entrants + (reg && reg.type === 'lottery' ? 1 : 0);
+    const chancePct = applicants > 0 ? Math.min(100, Math.round((ev.seatsTotal / applicants) * 100)) : 100;
+    const chanceColor = chancePct >= 66 ? '#1E7B4F' : chancePct >= 33 ? '#B45309' : '#CC0000';
+    const barWidth = isLottery ? (chancePct + '%') : (filledPct + '%');
+    const barColor = isLottery ? chanceColor : seatColor;
+    const barLabel = isLottery ? (chancePct + '% chance of selection') : (ev.seatsLeft <= 0 ? 'Full' : ev.seatsLeft + (ev.seatsLeft === 1 ? ' seat left' : ' seats left'));
+    const barSub = isLottery ? (applicants + ' applied \u00b7 ' + ev.seatsTotal + ' seats') : ((ev.seatsTotal - ev.seatsLeft) + ' of ' + ev.seatsTotal + ' filled');
+    const availTitle = isLottery ? 'Selection odds' : 'Availability';
+
+    return {
+      id: ev.id, title: ev.title, code: ev.code, category: ev.category, location: ev.location,
+      dateLabel: this.fmtDate(ev.date) + ' · ' + ev.time, timeLabel: ev.time,
+      imgBgValue: imgBgValue, placeholderImg: !ev.image,
+      phaseLabel: phaseLabelMap[phase], phaseBg: badge[phase].background, phaseColor: badge[phase].color,
+      availTitle: availTitle, barWidth: barWidth, barColor: barColor, barLabel: barLabel, barSub: barSub,
+      actionLabel, actionBg: actionStyle.background, actionColor: actionStyle.color, actionDisabled, onAction,
+      statusLabel, hasStatus,
+      statusBg: statusStyle ? statusStyle.background : 'transparent', statusColor: statusStyle ? statusStyle.color : '#1A1A1A',
+      showCancel, cancelLabel, onCancel, actionHint,
+      onView: () => this.go('event', ev.id),
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const RED = this.RED();
+    const isApp = s.loggedIn;
+    const isAdmin = s.role === 'admin';
+    const page = s.page;
+
+    // nav
+    const mk = (key, label, icon, target) => { const active = page === target || (target === 'admin' && page === 'admin') || (target === 'admin-events' && page === 'admin-events'); return { label, icon, onClick: () => target === 'admin-create' ? this.startCreate() : this.go(target), bg: active ? '#FAEAEA' : 'transparent', color: active ? RED : '#3F3F46', barColor: active ? RED : 'transparent' }; };
+    const navMain = [
+      mk('home', 'Home', 'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6', 'home'),
+      mk('catalog', 'Catalog', 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z', 'catalog'),
+    ];
+    const navAdmin = [
+      mk('dash', 'Dashboard', 'M4 13h7V4H4zM13 20h7v-9h-7zM13 4v4h7V4zM4 20h7v-4H4z', 'admin'),
+      mk('create', 'Create event', 'M12 5v14M5 12h14', 'admin-create'),
+      mk('events', 'Manage events', 'M3 5h18M3 12h18M3 19h18', 'admin-events'),
+      mk('folders', 'Release folders', 'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', 'admin-folders'),
+      mk('limits', 'Sign-up limits', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', 'admin-limits'),
+      mk('regform', 'Registration form', 'M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 12h6M9 16h6', 'admin-regform'),
+    ];
+
+    // user
+    const userName = isAdmin ? 'Dr. Pat Reynolds' : 'Anton Saenko';
+    const userInitials = isAdmin ? 'PR' : 'AS';
+    const roleLabel = isAdmin ? 'Administrator' : 'Student';
+    const firstName = userName.split(' ')[0].replace('Dr.', '').trim() || 'there';
+
+    // now labels
+    const nowDate = new Date(s.now);
+    const nowFull = nowDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    const nowDateLabel = nowDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+    // lottery banner (student, april folder)
+    const april = this.folder('april');
+    const aprilPhaseEvent = { folderId: 'april' };
+    const aprilPhase = this.phaseAt(aprilPhaseEvent, s.now);
+    const showLotteryBanner = !isAdmin && aprilPhase === 'lottery';
+    const aprilEnd = new Date(april.goLive).getTime() + april.window * 86400000;
+    const closeDate = new Date(aprilEnd);
+    const lotteryCloseLabel = 'When it closes ' + closeDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ',';
+
+    // catalog
+    const released = s.events.filter(e => this.phaseOf(e) !== 'upcoming' || isAdmin);
+    const visible = isAdmin ? s.events : s.events.filter(e => this.phaseOf(e) !== 'upcoming');
+    const cats = ['All', ...Array.from(new Set(s.events.map(e => e.category)))];
+    const catFilters = cats.map(c => ({ label: c, onClick: () => this.setState({ catFilter: c }), bg: s.catFilter === c ? RED : '#fff', color: s.catFilter === c ? '#fff' : '#52525B', border: s.catFilter === c ? '1px solid ' + RED : '1px solid #D4D4D8' }));
+    let catList = visible.filter(e => s.catFilter === 'All' || e.category === s.catFilter);
+    if (s.search.trim()) { const q = s.search.toLowerCase(); catList = catList.filter(e => e.title.toLowerCase().includes(q) || e.code.toLowerCase().includes(q) || e.category.toLowerCase().includes(q)); }
+    const catalogCards = catList.map(e => this.cardVM(e));
+
+    // home
+    const mySort = s.mySort || 'soonest';
+    const sortDir = mySort === 'latest' ? -1 : 1;
+    const myRegEvents = s.registrations.map(r => this.evt(r.eventId)).filter(Boolean).sort((a, b) => a.date === b.date ? 0 : (a.date < b.date ? -1 : 1) * sortDir);
+    const myEvents = myRegEvents.map(e => this.cardVM(e));
+    const lotteryUsed = this.lotteryCount('april');
+
+    // selected event
+    let ev = null;
+    if (page === 'event' && s.selectedId) {
+      const e = this.evt(s.selectedId);
+      if (e) {
+        const vm = this.cardVM(e);
+        ev = { ...vm, descNode: React.createElement('div', { className: 'rte-content', dangerouslySetInnerHTML: { __html: e.desc } }) };
+      }
+    }
+
+    // admin stats
+    const releasedAll = s.events.filter(e => this.phaseOf(e) !== 'upcoming');
+    const filled = releasedAll.reduce((a, e) => a + (e.seatsTotal - e.seatsLeft), 0);
+    const lotteryEntriesTotal = s.events.filter(e => this.phaseOf(e) === 'lottery').reduce((a, e) => a + e.entrants, 0) + this.state.registrations.filter(r => r.type === 'lottery').length;
+    const stats = [
+      { label: 'Active events', value: String(s.events.length), sub: releasedAll.length + ' released' },
+      { label: 'Release folders', value: String(s.folders.length), sub: s.folders.filter(f => this.phaseAt({ folderId: f.id }, s.now) === 'upcoming').length + ' scheduled' },
+      { label: 'Seats filled', value: String(filled), sub: 'across live events' },
+      { label: 'Lottery entries', value: String(lotteryEntriesTotal), sub: 'April 2026 window' },
+    ];
+
+    const fStatus = (f) => { const ph = this.phaseAt({ folderId: f.id }, s.now); if (ph === 'upcoming') return { label: 'Scheduled', bg: '#EDEDEF', color: '#6F7271' }; if (ph === 'lottery') return { label: 'Lottery open', bg: '#FCEFDD', color: '#B45309' }; return { label: 'Open', bg: '#E2EFE7', color: '#1E7B4F' }; };
+    const folderCards = s.folders.map(f => { const st = fStatus(f); const count = s.events.filter(e => e.folderId === f.id).length; const go = new Date(f.goLive); const ph = this.phaseAt({ folderId: f.id }, s.now); let meta; if (ph === 'upcoming') { const days = Math.ceil((go.getTime() - s.now) / 86400000); meta = 'Goes live ' + go.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' · in ' + days + ' day' + (days === 1 ? '' : 's'); } else { meta = 'Live since ' + go.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' · ' + f.window + 'd window, max ' + f.max; } return { name: f.name, statusLabel: st.label, statusBg: st.bg, statusColor: st.color, count: String(count), meta }; });
+
+    const folderEditors = s.folders.map(f => { const st = fStatus(f); const count = s.events.filter(e => e.folderId === f.id).length; return { name: f.name, statusLabel: st.label, statusBg: st.bg, statusColor: st.color, countLabel: count + ' events', manageLabel: 'Manage ' + count + ' event' + (count === 1 ? '' : 's'), onManage: () => this.goEvents(f.id), goLiveDate: f.goLive.split('T')[0], goLiveTime: (f.goLive.split('T')[1] || '08:00:00').slice(0, 5), window: String(f.window), max: String(f.max), ruleLabel: 'During the first ' + f.window + ' day' + (f.window === 1 ? '' : 's') + ' after release, students may enter up to ' + f.max + ' lotteries in this folder. After the window, remaining seats are first-come, first-served.', onDate: this.setFolderDate(f.id, f.goLive), onTime: this.setFolderTime(f.id, f.goLive), onWindow: (e) => this.updFolder(f.id, 'window', +e.target.value || 0), onMax: (e) => this.updFolder(f.id, 'max', +e.target.value || 0) }; });
+
+    const limitRows = s.folders.map(f => { const st = fStatus(f); return { name: f.name, window: String(f.window), max: String(f.max), statusLabel: st.label, statusColor: st.color, onWindow: (e) => this.updFolder(f.id, 'window', +e.target.value || 0), onMax: (e) => this.updFolder(f.id, 'max', +e.target.value || 0) }; });
+
+    // activity feed
+    const activity = [];
+    s.registrations.slice().reverse().forEach(r => { const e = this.evt(r.eventId); if (!e) return; const map = { won: { t: 'Lottery win recorded — ' + e.title, d: '#1E7B4F' }, lost: { t: 'Lottery result sent — ' + e.title, d: '#CC0000' }, pending: { t: 'Lottery entry — ' + e.title, d: '#B45309' }, confirmed: { t: 'Registration — ' + e.title, d: '#1E7B4F' }, waitlist: { t: 'Joined waitlist — ' + e.title, d: '#A16207' } }; const m = map[r.status]; if (m) activity.push({ text: m.t, when: 'You · just now', dotColor: m.d }); });
+    activity.push({ text: 'April 2026 Programs lottery opened', when: 'System · Apr 9, 8:00 AM', dotColor: '#B45309' });
+    activity.push({ text: '64 students entered Adulting 101', when: 'System · today', dotColor: '#6F7271' });
+    const activityTop = activity.slice(0, 6);
+
+    // create preview
+    const form = s.form;
+    const previewImgBg = form.image ? ('url(' + form.image + ') center/cover no-repeat') : ('repeating-linear-gradient(135deg, rgba(0,0,0,.05) 0 1px, transparent 1px 11px), #F4E6E6');
+    const previewDate = (form.date ? this.fmtDate(form.date) : 'Date TBD') + ' · ' + (form.time || 'Time TBD');
+    const createFolder = this.folder(form.folderId);
+    const createPhase = createFolder ? this.phaseAt({ folderId: createFolder.id }, s.now) : 'upcoming';
+    const folderHint = createPhase === 'upcoming' ? 'This folder is scheduled — the event stays hidden from students until ' + new Date(createFolder.goLive).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) + '.' : 'This folder is already live — the event will appear in the catalog immediately.';
+    const previewPhase = createPhase === 'lottery' ? 'Lottery open' : createPhase === 'open' ? 'Open registration' : 'Scheduled';
+
+    // create form: cohorts + per-event registration form builder
+    const TLABELS = { text: 'Short text', textarea: 'Long text', number: 'Number', choice: 'Single choice', yesno: 'Yes / No' };
+    const chipBg = (sel) => sel ? '#FBEAEA' : '#fff';
+    const chipColor = (sel) => sel ? RED : '#52525B';
+    const chipBorder = (sel) => sel ? RED : '#D4D4D8';
+    const ALL = 'All cohorts';
+    const tagOf = (label) => { const sel = form.tags.includes(label); return { label, selected: sel, onToggle: () => this.toggleTag(label), bg: chipBg(sel), color: chipColor(sel), border: chipBorder(sel) }; };
+    const gradYear = new Date(s.now).getFullYear();
+    const cohortLabels = (years) => { const out = []; years.forEach(y => { out.push('Cohort of ' + y); out.push('Cohort of ' + y + ' Transfer'); }); return out; };
+    const currentYears = []; for (let y = gradYear; y <= gradYear + 4; y++) currentYears.push(y);
+    const pastYears = []; for (let y = gradYear - 1; y >= gradYear - 5; y--) pastYears.push(y);
+    const currentCohortLabels = cohortLabels(currentYears);
+    const pastCohortLabels = cohortLabels(pastYears);
+    const generatedSet = new Set([ALL, ...currentCohortLabels, ...pastCohortLabels]);
+    const allCohort = tagOf(ALL);
+    const currentCohortChips = currentCohortLabels.map(tagOf);
+    const pastCohortChips = pastCohortLabels.map(tagOf);
+    const customCohortChips = form.tags.filter(t => !generatedSet.has(t)).map(tagOf);
+    const cohortsMoreLabel = s.cohortsExpanded ? 'Show fewer cohorts' : ('Show previous cohorts (' + pastCohortLabels.length + ')');
+    const cohortsChevron = s.cohortsExpanded ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6';
+
+    // registration form builder (per event)
+    const formQRows = form.formQ.map(q => { const req = q.required; return { id: q.id, prompt: q.prompt, typeLabel: TLABELS[q.type] || q.type, isOnce: q.source === 'once', requiredLabel: req ? 'Required' : 'Optional', requiredBg: req ? RED : '#F4F4F5', requiredColor: req ? '#fff' : '#71717A', onToggleReq: () => this.toggleFormQReq(q.id), onRemove: () => this.removeFormQ(q.id) }; });
+    const libAddRows = s.questionLibrary.map(q => { const inc = form.formQ.some(x => x.source === 'lib' && x.id === q.id); return { id: q.id, label: q.label, included: inc, onToggle: () => this.toggleLibQ(q.id), bg: chipBg(inc), color: chipColor(inc), border: chipBorder(inc) }; });
+    const formTermRows = s.termsTemplates.map(t => { const sel = form.formTerms.includes(t.id); return { id: t.id, name: t.name, selected: sel, onToggle: () => this.toggleFormTerm(t.id), bg: chipBg(sel), color: chipColor(sel), border: chipBorder(sel) }; });
+    const formSummary = form.formQ.length + ' question' + (form.formQ.length === 1 ? '' : 's') + ' · ' + form.formTerms.length + ' terms';
+    const previewTags = form.tags.length ? form.tags : [ALL];
+    const attachedFormLabel = formSummary;
+
+    // edit mode + manage-events tab
+    const editing = !!s.editingId;
+    const createHeading = editing ? 'Edit event' : 'Create event';
+    const createSaveLabel = editing ? 'Save changes' : 'Publish event';
+    const createBackLabel = editing ? 'Manage events' : 'Dashboard';
+    const createBack = editing ? () => this.goEvents(form.folderId) : () => this.go('admin');
+    const phChip = (ph) => ph === 'lottery' ? { label: 'Lottery', bg: '#FCEFDD', color: '#B45309' } : ph === 'open' ? { label: 'Open', bg: '#E2EFE7', color: '#1E7B4F' } : { label: 'Scheduled', bg: '#EDEDEF', color: '#6F7271' };
+    const evtFilter = s.eventsFilter || 'all';
+    const eventsFilterPills = [{ id: 'all', name: 'All folders' }].concat(s.folders.map(f => ({ id: f.id, name: f.name }))).map(o => { const active = evtFilter === o.id; return { id: o.id, name: o.name, active, onClick: () => this.setEventsFilter(o.id), bg: active ? RED : '#fff', color: active ? '#fff' : '#52525B', border: active ? RED : '#D4D4D8' }; });
+    const eventsList = s.events.filter(e => evtFilter === 'all' || e.folderId === evtFilter).map(e => {
+      const ph = phChip(this.phaseOf(e));
+      const fld = this.folder(e.folderId);
+      const qCount = (e.regForm && e.regForm.questions) ? e.regForm.questions.length : 0;
+      const tagList = (e.tags && e.tags.length) ? e.tags : ['All cohorts'];
+      return { id: e.id, title: e.title, meta: e.code + '  ·  ' + e.category + '  ·  ' + this.fmtDate(e.date), folderName: fld ? fld.name : '—', seatsLabel: (e.seatsTotal - e.seatsLeft) + ' / ' + e.seatsTotal + ' filled', cohortLabel: tagList.length > 2 ? (tagList.slice(0, 2).join(', ') + ' +' + (tagList.length - 2)) : tagList.join(', '), formLabel: qCount + ' question' + (qCount === 1 ? '' : 's'), phLabel: ph.label, phBg: ph.bg, phColor: ph.color, onEdit: () => this.editEvent(e.id) };
+    });
+    const eventsTitle = evtFilter === 'all' ? 'All events' : ('Events in ' + (this.folder(evtFilter) ? this.folder(evtFilter).name : ''));
+    const eventsCount = eventsList.length;
+    const eventsEmpty = eventsCount === 0;
+
+    // rte buttons
+    const rteButtons = [
+      { label: 'B', title: 'Bold', onClick: this.exec('bold') },
+      { label: 'I', title: 'Italic', onClick: this.exec('italic') },
+      { label: 'H', title: 'Heading', onClick: this.exec('formatBlock', '<h3>') },
+      { label: '• List', title: 'Bullet list', onClick: this.exec('insertUnorderedList') },
+      { label: 'Link', title: 'Insert link', onClick: this.rteLink },
+      { label: 'Image', title: 'Insert image placeholder', onClick: this.rteImg },
+    ];
+
+    // timeline / demo
+    const timeStop = (label, ts, sub) => {
+      const active = Math.abs(s.now - ts) < 3600000 * 6;
+      return { title: label, sub, onClick: () => this.setNow(ts),
+        bg: active ? 'rgba(255,200,87,.13)' : 'rgba(255,255,255,.05)', borderColor: active ? 'rgba(255,200,87,.4)' : 'transparent',
+        dotColor: active ? '#FFC857' : '#52525B',
+        titleColor: active ? '#FFC857' : '#fff', subColor: active ? 'rgba(255,200,87,.85)' : '#8A8A8F' };
+    };
+    const timeline = [
+      timeStop('Before release', this.T_BEFORE, 'Apr 8 — April folder hidden'),
+      timeStop('Lottery window open', this.T_LOTTERY, 'Apr 9 — enter up to 3 events'),
+      timeStop('Draw & open registration', this.T_RESULTS, 'Apr 10 — results + first-come'),
+    ];
+    let demoHint = 'Advance the clock to watch the April lottery run end-to-end. Enter a few lotteries first, then jump to Apr 10.';
+    if (aprilPhase === 'upcoming') demoHint = 'April events are hidden from students until Apr 9. Switch to admin to preview them.';
+    else if (aprilPhase === 'open') demoHint = 'Lottery is drawn — check notifications. Remaining seats are now first-come, first-served.';
+
+    // ----- registration popup view model -----
+    const TYPELABELS = { text: 'Short text', textarea: 'Long text', number: 'Number', choice: 'Single choice', yesno: 'Yes / No' };
+    const m = s.regModal;
+    let regModalOpen = false, regModalTitle = '', regTypeLabel = '', regSubmitLabel = '', regQuestions = [], regTerms = [], regCanSubmit = false, hasRegQuestions = false;
+    if (m) {
+      regModalOpen = true;
+      const e = this.evt(m.eventId);
+      regModalTitle = e ? e.title : '';
+      regTypeLabel = m.type === 'lottery' ? 'Lottery entry' : 'Event registration';
+      regSubmitLabel = m.type === 'lottery' ? 'Submit lottery entry' : 'Complete registration';
+      const aq = this.activeQuestions();
+      hasRegQuestions = aq.length > 0;
+      regQuestions = aq.map(q => {
+        const val = m.answers[q.id] != null ? m.answers[q.id] : '';
+        const saved = s.studentAnswers[q.id];
+        const prefilled = saved != null && String(saved).trim() !== '' && saved === val;
+        const choice = q.type === 'choice' || q.type === 'yesno';
+        return {
+          id: q.id, prompt: q.prompt, reqMark: q.required ? ' *' : '',
+          isText: q.type === 'text', isTextarea: q.type === 'textarea', isNumber: q.type === 'number', isChoice: choice,
+          value: String(val), prefilled, prefillNote: 'Saved from a previous sign-up \u2014 change it anytime',
+          onInput: (ev) => this.setRegAnswer(q.id, ev.target.value),
+          options: this.qOptions(q).map(o => ({ label: o, selected: val === o, onClick: () => this.setRegAnswer(q.id, o), bg: val === o ? RED : '#fff', color: val === o ? '#fff' : '#3F3F46', borderColor: val === o ? RED : '#D4D4D8' })),
+        };
+      });
+      regTerms = this.activeTerms().map(t => ({ id: t.id, name: t.name, agreed: !!m.agreed[t.id], agreeBg: m.agreed[t.id] ? '#F1F9F4' : '#fff', onToggle: () => this.toggleAgree(t.id), bodyNode: React.createElement('div', { className: 'rte-content', style: { fontSize: '13px' }, dangerouslySetInnerHTML: { __html: t.body } }) }));
+      const reqOk = aq.every(q => !q.required || (m.answers[q.id] && String(m.answers[q.id]).trim()));
+      const termsOk = this.activeTerms().every(t => m.agreed[t.id]);
+      regCanSubmit = reqOk && termsOk;
+    }
+
+    // ----- admin: registration form builder view model -----
+    const af = this.activeQuestions();
+    const formQuestionRows = af.map(q => ({ id: q.id, prompt: q.prompt, typeLabel: TYPELABELS[q.type], common: q.common, requiredLabel: q.required ? 'Required' : 'Optional', requiredBg: q.required ? '#FBE3E3' : '#EDEDEF', requiredColor: q.required ? '#CC0000' : '#6F7271', onToggleReq: () => this.toggleQuestionRequired(q.id), onRemove: () => this.toggleFormQuestion(q.id) }));
+    const libRows = s.questionLibrary.map(q => { const inForm = s.formConfig.questions.includes(q.id); return { id: q.id, label: q.label, prompt: q.prompt, typeLabel: TYPELABELS[q.type], common: q.common, inForm, btnLabel: inForm ? 'Added \u2713' : '+ Add to form', btnBg: inForm ? '#E2EFE7' : '#fff', btnColor: inForm ? '#1E7B4F' : RED, btnBorder: inForm ? '1px solid #BFE3CD' : '1px solid ' + RED, onToggle: () => this.toggleFormQuestion(q.id) }; });
+    const termRows = s.termsTemplates.map(t => { const inc = s.formConfig.terms.includes(t.id); return { id: t.id, name: t.name, summary: t.summary, included: inc, checkBg: inc ? RED : '#fff', checkBorder: inc ? RED : '#C7C7CC', boxBg: inc ? '#FFF8F1' : '#fff', boxBorder: inc ? '1.5px solid ' + RED : '1px solid #E9E9EB', onToggle: () => this.toggleFormTerm(t.id) }; });
+    const nqv = s.nq;
+    const previewQuestions = af.map(q => { const choice = q.type === 'choice' || q.type === 'yesno'; return { prompt: q.prompt, reqMark: q.required ? ' *' : '', isChoice: choice, isText: !choice, options: this.qOptions(q) }; });
+    const previewTerms = this.activeTerms().map(t => ({ name: t.name }));
+
+    const toast = s.toast;
+    const toastDotColor = toast ? (toast.kind === 'warn' ? '#FFC857' : '#5BD18A') : '#5BD18A';
+
+    return {
+      isLogin: !isApp, isApp,
+      hoverDarken: { filter: 'brightness(.9)' }, hoverGray: { background: '#F4F4F5' }, hoverWhite: { color: '#fff' }, hoverChip: { background: 'rgba(255,255,255,.12)' }, hoverRow: { background: '#F7F7F8' }, hoverCard: { boxShadow: '0 10px 26px rgba(0,0,0,.10)', transform: 'translateY(-2px)' },
+      loginStudent: this.loginStudent, loginGuest: this.loginGuest, loginAdmin: this.loginAdmin,
+
+      isHome: page === 'home', isCatalog: page === 'catalog', isEvent: page === 'event',
+      isAdminDash: page === 'admin', isAdminCreate: page === 'admin-create', isAdminEvents: page === 'admin-events', isAdminFolders: page === 'admin-folders', isAdminLimits: page === 'admin-limits', isAdminRegform: page === 'admin-regform',
+      isAdmin,
+
+      navMain, navAdmin,
+      userName, userInitials, roleLabel, firstName, userUnity: isAdmin ? 'preynolds@ncsu.edu' : 'asaenko@ncsu.edu',
+      switchLabel: isAdmin ? 'Switch to student view' : 'Switch to admin view',
+      toggleMenu: this.toggleMenu, menuOpen: s.menuOpen, switchRole: this.switchRole, logout: this.logout,
+      toggleNotif: this.toggleNotif, notifOpen: s.notifOpen, notifs: s.notifs, notifCount: String(s.notifs.length), hasNotif: s.notifs.length > 0, noNotifs: s.notifs.length === 0, clearNotif: this.clearNotif,
+
+      goHome: () => this.go('home'), goCatalog: () => this.go('catalog'), goAdmin: () => this.go('admin'), goCreate: this.startCreate, goFolders: () => this.go('admin-folders'), goBack: () => this.go('catalog'),
+
+      phaseTagLabel: aprilPhase === 'lottery' ? 'Lottery open' : aprilPhase === 'open' ? 'Registration open' : 'Spring 2026 live',
+      phaseTagText: aprilPhase === 'lottery' ? 'April programs are in the lottery window. Enter up to ' + april.max + ' events.' : aprilPhase === 'open' ? 'Lottery drawn. Open seats are first-come, first-served.' : 'Browse current programs open for registration.',
+
+      nowDateLabel, nowFull,
+      showLotteryBanner, lotteryFolderName: april.name, lotteryMax: String(april.max), lotteryUsed: String(lotteryUsed), lotteryCloseLabel,
+      myEvents, myCount: String(myEvents.length), myEmpty: myEvents.length === 0, hasMyEvents: myEvents.length > 0,
+      sortSoonest: () => this.setState({ mySort: 'soonest' }), sortLatest: () => this.setState({ mySort: 'latest' }),
+      soonestBg: mySort === 'soonest' ? RED : '#fff', soonestColor: mySort === 'soonest' ? '#fff' : '#52525B',
+      latestBg: mySort === 'latest' ? RED : '#fff', latestColor: mySort === 'latest' ? '#fff' : '#52525B',
+
+      search: s.search, onSearch: this.onSearch, catFilters, catalogCards, catEmpty: catalogCards.length === 0,
+
+      ev: ev || {},
+
+      stats, folderCards, activity: activityTop,
+      goFoldersBtn: () => this.go('admin-folders'),
+
+      categoryOptions: ['Personal Development', 'Career', 'Health & Wellness', 'Civic Engagement', 'Global Engagement', 'Research'],
+      folderOptions: s.folders.map(f => ({ id: f.id, name: f.name })),
+      form: { title: form.title, code: form.code, category: form.category, folderId: form.folderId, date: form.date, time: form.time, location: form.location, seats: String(form.seats) },
+      setTitle: this.setTitle, setCode: this.setCode, setCategory: this.setCategory, setDate: this.setDate, setTime: this.setTime, setLocation: this.setLocation, setSeats: this.setSeats, setFolder: this.setFolder,
+
+      // create: cohorts + registration form builder
+      allCohort, currentCohortChips, pastCohortChips, customCohortChips, cohortsExpanded: s.cohortsExpanded, toggleCohorts: this.toggleCohorts, cohortsMoreLabel, cohortsChevron,
+      tagDraft: s.tagDraft, setTagDraft: this.setTagDraft, addTag: this.addTag, onTagKey: this.onTagKey,
+      formExpanded: s.formExpanded, toggleFormPanel: this.toggleFormPanel, formSummary, formPanelBorder: s.formExpanded ? '1px solid #E9E9EB' : 'none', formChevron: s.formExpanded ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6',
+      formQRows, formQEmpty: formQRows.length === 0, libAddRows, formTermRows,
+      ocqOpen: s.ocqOpen, ocqClosed: !s.ocqOpen, toggleOcq: this.toggleOcq, addOnce: this.addOnce,
+      ocq: { prompt: s.ocq.prompt, type: s.ocq.type, options: s.ocq.options }, setOcqPrompt: this.setOcqPrompt, setOcqType: this.setOcqType, setOcqOptions: this.setOcqOptions, toggleOcqReq: this.toggleOcqReq,
+      ocqNeedsOptions: s.ocq.type === 'choice', ocqReqBg: s.ocq.required ? RED : '#fff', ocqReqBorder: s.ocq.required ? RED : '#C7C7CC', ocqReqDot: s.ocq.required ? '#fff' : 'transparent',
+      previewTags, attachedFormLabel,
+      onFile: this.onFile, hasFormImg: !!form.image, noFormImg: !form.image, imgDropBorder: form.image ? '2px solid #1E7B4F' : '2px dashed #D4D4D8', imgDropBg: form.image ? '#F1F9F4' : '#FAFAFA',
+      rteButtons, editorRef: this.editorRef, saveEvent: this.saveEvent,
+      createHeading, createSaveLabel, createBackLabel, createBack,
+      eventsFilterPills, eventsList, eventsTitle, eventsCount: String(eventsCount), eventsEmpty, goEventsAll: () => this.goEvents('all'),
+      folderHint, previewImgBg, previewPhase, previewCategory: form.category, previewTitle: form.title || 'Your event title', previewDate, previewSeats: String(form.seats),
+
+      folderEditors, nf: { name: s.nf.name, goLive: s.nf.goLive, time: s.nf.time, window: String(s.nf.window), max: String(s.nf.max) },
+      setNfName: this.setNfName, setNfDate: this.setNfDate, setNfTime: this.setNfTime, setNfWindow: this.setNfWindow, setNfMax: this.setNfMax, addFolder: this.addFolder,
+
+      defWindow: String(s.defWindow), defMax: String(s.defMax), setDefWindow: this.setDefWindow, setDefMax: this.setDefMax,
+      rulePreview: 'During the first ' + s.defWindow + ' day' + (+s.defWindow === 1 ? '' : 's') + ' after a folder goes live, each student may enter the lottery for up to ' + s.defMax + ' event' + (+s.defMax === 1 ? '' : 's') + '. When that window closes, a random draw assigns seats and every entrant is notified whether they got in. After that, all remaining seats are first-come, first-served with no per-student limit.',
+      limitRows,
+
+      // registration popup
+      regModalOpen, regModalTitle, regTypeLabel, regSubmitLabel, regQuestions, regTerms, hasRegQuestions,
+      closeReg: this.closeReg, submitReg: this.submitReg, stopProp: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+      regSubmitDisabled: !regCanSubmit, regSubmitBg: regCanSubmit ? RED : '#E4E4E7', regSubmitColor: regCanSubmit ? '#fff' : '#A1A1AA', regSubmitCursor: regCanSubmit ? 'pointer' : 'not-allowed',
+
+      // admin registration form builder
+      formQuestionRows, formQEmpty: formQuestionRows.length === 0, libRows, termRows, previewQuestions, previewTerms,
+      previewEmpty: previewQuestions.length === 0, hasPreviewTerms: previewTerms.length > 0, noPreviewTerms: previewTerms.length === 0,
+      activeFormCount: String(af.length), activeTermsCount: String(this.activeTerms().length),
+      nq: { prompt: nqv.prompt, type: nqv.type, options: nqv.options }, nqRequired: nqv.required, nqNeedsOptions: nqv.type === 'choice',
+      setNqPrompt: this.setNqPrompt, setNqType: this.setNqType, setNqOptions: this.setNqOptions, toggleNqRequired: this.toggleNqRequired, addQuestion: this.addQuestion,
+      nqReqBg: nqv.required ? RED : '#fff', nqReqBorder: nqv.required ? RED : '#C7C7CC', nqReqDot: nqv.required ? '#fff' : 'transparent',
+
+      showToast: !!toast, toastMsg: toast ? toast.msg : '', toastDotColor: toastDotColor,
+      showDemo: (this.props.showDemoPanel !== false) && isApp, demoExpanded: s.demoExpanded, toggleDemo: this.toggleDemo, demoChevron: s.demoExpanded ? 'm6 9 6 6 6-6' : 'm18 15-6-6-6 6', timeline, demoHint,
+    };
+  }
+}
+</script>
+</body>
+</html>
