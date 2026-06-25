@@ -44,6 +44,12 @@
     .dc-2col, .dc-3col { grid-template-columns: 1fr !important; }
   }
   @media (max-width: 760px) {
+    /* top bar: drop the account name/role + chevron, keep just the avatar,
+       so the header can't overflow and create dead space to the right */
+    html, body { overflow-x: hidden; }
+    .dc-acct-text { display: none !important; }
+    .dc-acct-btn { padding: 4px !important; }
+
     /* login splits into one column and drops the marketing panel */
     .dc-login { grid-template-columns: 1fr !important; max-width: 440px !important; }
     .dc-login > div:last-child { display: none !important; }
@@ -175,13 +181,13 @@
 
         <!-- account -->
         <div style="position: relative; margin-left: 4px;">
-          <button onClick="{{ toggleMenu }}" style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 5px 12px 5px 5px; cursor: pointer;" style-hover="{{ hoverChip }}">
+          <button class="dc-acct-btn" onClick="{{ toggleMenu }}" style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 5px 12px 5px 5px; cursor: pointer;" style-hover="{{ hoverChip }}">
             <span style="width: 30px; height: 30px; border-radius: 50%; background: #CC0000; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{ userInitials }}</span>
-            <span style="text-align: left; line-height: 1.15;">
+            <span class="dc-acct-text" style="text-align: left; line-height: 1.15;">
               <span style="display: block; color: #fff; font-size: 13px; font-weight: 600;">{{ userName }}</span>
               <span style="display: block; color: #A1A1AA; font-size: 11px;">{{ roleLabel }}</span>
             </span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="dc-acct-text" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
             <div style="position: absolute; top: 52px; right: 0; width: 240px; background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.22); overflow: hidden; z-index: 50; animation: fadeUp .18s ease;">
