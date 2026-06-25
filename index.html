@@ -1068,6 +1068,53 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#CC0000&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showDemoPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+// --- Rich-text sanitization (defense-in-depth for any future backend) ---
+// All user-authored HTML (event descriptions, terms bodies, RTE output) is
+// passed through dcSanitize before it is stored or rendered, so stored XSS is
+// neutralised the moment this prototype is wired to a real server.
+const DC_ALLOWED_TAGS = new Set(['P','BR','H1','H2','H3','H4','STRONG','B','EM','I','U','S','UL','OL','LI','A','IMG','SPAN','DIV','BLOCKQUOTE','HR','CODE','PRE']);
+const DC_DROP_TAGS = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','LINK','META','BASE','FORM','INPUT','BUTTON','TEXTAREA','SELECT','SVG','MATH','TEMPLATE']);
+const DC_ALLOWED_ATTR = { A: ['href'], IMG: ['src','alt','style'], SPAN: ['style'], DIV: ['style'], P: ['style'], LI: ['style'] };
+
+// Returns true when a URL is safe for the given context. Strips control chars
+// and whitespace first to defeat obfuscation like "java\nscript:".
+function dcSafeUrl(url, isImage) {
+  const v = String(url == null ? '' : url).replace(/[\s\x00-\x1f\x7f]+/g, '').toLowerCase();
+  if (/^(javascript|vbscript|file):/.test(v)) return false;
+  if (v.startsWith('data:')) return isImage && /^data:image\//.test(v);
+  return true; // http(s), mailto, relative paths, #anchors
+}
+
+function dcSanitize(html) {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = String(html == null ? '' : html);
+  (function clean(node) {
+    [...node.childNodes].forEach(function process(child) {
+      if (child.nodeType === 8) { child.remove(); return; }      // strip comments
+      if (child.nodeType !== 1) return;                          // keep text nodes
+      const tag = child.tagName;
+      if (DC_DROP_TAGS.has(tag)) { child.remove(); return; }     // drop dangerous elements + contents
+      if (!DC_ALLOWED_TAGS.has(tag)) {                           // unwrap unknown tags, keep their text
+        const kids = [...child.childNodes];
+        child.replaceWith(...kids);
+        kids.forEach(process);
+        return;
+      }
+      const allowed = DC_ALLOWED_ATTR[tag] || [];
+      [...child.attributes].forEach(a => {
+        const an = a.name.toLowerCase();
+        if (an.startsWith('on') || !allowed.includes(an)) { child.removeAttribute(a.name); return; }
+        if (an === 'href' && !dcSafeUrl(a.value, false)) child.removeAttribute(a.name);
+        if (an === 'src' && !dcSafeUrl(a.value, true)) child.removeAttribute(a.name);
+        if (an === 'style' && /(expression|javascript:|vbscript:|url\s*\()/i.test(a.value)) child.removeAttribute(a.name);
+      });
+      if (tag === 'A' && child.hasAttribute('href')) child.setAttribute('rel', 'noopener noreferrer nofollow');
+      clean(child);
+    });
+  })(tpl.content);
+  return tpl.innerHTML;
+}
+
 class Component extends DCLogic {
   editorRef = React.createRef();
 
@@ -1374,7 +1421,7 @@ class Component extends DCLogic {
   onFile = (e) => { const file = e.target.files && e.target.files[0]; if (!file) return; const rd = new FileReader(); rd.onload = () => this.setState(s => ({ form: { ...s.form, image: rd.result } })); rd.readAsDataURL(file); };
 
   exec = (cmd, val) => () => { document.execCommand(cmd, false, val || null); if (this.editorRef.current) this.editorRef.current.focus(); };
-  rteLink = () => { const url = window.prompt('Link URL:', 'https://'); if (url) { document.execCommand('createLink', false, url); } if (this.editorRef.current) this.editorRef.current.focus(); };
+  rteLink = () => { const url = window.prompt('Link URL:', 'https://'); if (url) { if (dcSafeUrl(url, false)) { document.execCommand('createLink', false, url); } else { this.toast('That link type is not allowed', 'warn'); } } if (this.editorRef.current) this.editorRef.current.focus(); };
   rteImg = () => { if (this.editorRef.current) this.editorRef.current.focus(); document.execCommand('insertHTML', false, '<img src="https://via.placeholder.com/0" style="display:block;height:120px;width:100%;background:repeating-linear-gradient(135deg,#eee 0 8px,#e0e0e0 8px 16px);border-radius:8px;" alt="image placeholder" />'); };
 
   // ---------- edit existing events / manage events tab ----------
@@ -1407,7 +1454,7 @@ class Component extends DCLogic {
   saveEvent = () => {
     const f = this.state.form;
     if (!f.title.trim()) { this.toast('Add an event title first', 'warn'); return; }
-    const desc = this.editorRef.current ? this.editorRef.current.innerHTML : '';
+    const desc = this.editorRef.current ? dcSanitize(this.editorRef.current.innerHTML) : '';
     const editingId = this.state.editingId;
     if (editingId) {
       const newTotal = +f.seats || 30;
@@ -1607,7 +1654,7 @@ class Component extends DCLogic {
       const e = this.evt(s.selectedId);
       if (e) {
         const vm = this.cardVM(e);
-        ev = { ...vm, descNode: React.createElement('div', { className: 'rte-content', dangerouslySetInnerHTML: { __html: e.desc } }) };
+        ev = { ...vm, descNode: React.createElement('div', { className: 'rte-content', dangerouslySetInnerHTML: { __html: dcSanitize(e.desc) } }) };
       }
     }
 
@@ -1758,7 +1805,7 @@ class Component extends DCLogic {
           options: this.qOptions(q).map(o => ({ label: o, selected: val === o, onClick: () => this.setRegAnswer(q.id, o), bg: val === o ? RED : '#fff', color: val === o ? '#fff' : '#3F3F46', borderColor: val === o ? RED : '#D4D4D8' })),
         };
       });
-      regTerms = this.activeTerms().map(t => ({ id: t.id, name: t.name, agreed: !!m.agreed[t.id], agreeBg: m.agreed[t.id] ? '#F1F9F4' : '#fff', onToggle: () => this.toggleAgree(t.id), bodyNode: React.createElement('div', { className: 'rte-content', style: { fontSize: '13px' }, dangerouslySetInnerHTML: { __html: t.body } }) }));
+      regTerms = this.activeTerms().map(t => ({ id: t.id, name: t.name, agreed: !!m.agreed[t.id], agreeBg: m.agreed[t.id] ? '#F1F9F4' : '#fff', onToggle: () => this.toggleAgree(t.id), bodyNode: React.createElement('div', { className: 'rte-content', style: { fontSize: '13px' }, dangerouslySetInnerHTML: { __html: dcSanitize(t.body) } }) }));
       const reqOk = aq.every(q => !q.required || (m.answers[q.id] && String(m.answers[q.id]).trim()));
       const termsOk = this.activeTerms().every(t => m.agreed[t.id]);
       regCanSubmit = reqOk && termsOk;
