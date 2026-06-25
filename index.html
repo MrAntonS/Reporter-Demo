@@ -45,6 +45,11 @@
   @media (max-width: 860px) {
     /* multi-column form & dashboard grids collapse to a single column */
     .dc-2col, .dc-3col { grid-template-columns: 1fr !important; }
+    /* release-folder editor: 4 inputs → 2 across (date pickers can't shrink to 4-up) */
+    .dc-foldergrid { grid-template-columns: 1fr 1fr !important; }
+    /* new-folder row: stack every field and make Add full width */
+    .dc-newfolder { grid-template-columns: 1fr !important; }
+    .dc-newfolder > button { width: 100% !important; }
   }
   @media (max-width: 760px) {
     /* top bar: drop the account name/role + chevron, keep just the avatar,
@@ -97,6 +102,7 @@
   }
   @media (max-width: 480px) {
     .dc-main { padding: 18px 14px 56px !important; }
+    .dc-foldergrid { grid-template-columns: 1fr !important; }
   }
 </style>
 </helmet>
@@ -744,7 +750,7 @@
                       <div style="flex: 1;"></div>
                       <button onClick="{{ f.onManage }}" style="background: #fff; color: #CC0000; border: 1px solid #E6BDBD; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;" style-hover="{{ hoverGray }}">{{ f.manageLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                    <div class="dc-foldergrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
                       <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live date</label><input type="date" value="{{ f.goLiveDate }}" onInput="{{ f.onDate }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
                       <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live time</label><input value="{{ f.goLiveTime }}" onInput="{{ f.onTime }}" placeholder="08:00" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
                       <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Lottery window (days)</label><input type="number" value="{{ f.window }}" onInput="{{ f.onWindow }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
@@ -757,7 +763,7 @@
 
               <div style="background: #fff; border: 1px dashed #D4D4D8; border-radius: 14px; padding: 22px 24px;">
                 <div style="font-size: 15px; font-weight: 700; margin-bottom: 14px;">New release folder</div>
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
+                <div class="dc-newfolder" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
                   <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Name</label><input value="{{ nf.name }}" onInput="{{ setNfName }}" placeholder="Fall 2026 Programs" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
                   <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Go-live</label><input type="date" value="{{ nf.goLive }}" onInput="{{ setNfDate }}" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
                   <div><label style="display: block; font-size: 12px; font-weight: 700; color: #71717A; margin-bottom: 5px;">Time</label><input value="{{ nf.time }}" onInput="{{ setNfTime }}" placeholder="08:00" style="width: 100%; border: 1px solid #D4D4D8; border-radius: 8px; padding: 9px 11px; font-size: 13.5px;" /></div>
