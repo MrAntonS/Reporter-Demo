@@ -38,6 +38,9 @@
   ::-webkit-scrollbar-thumb { background: #C7C7CC; border-radius: 6px; border: 2px solid #F1F1F2; }
   ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
 
+  /* the "Help & support" row lives in the account menu only on mobile */
+  .dc-help-row { display: none; }
+
   /* ---------- Responsive / mobile ---------- */
   @media (max-width: 860px) {
     /* multi-column form & dashboard grids collapse to a single column */
@@ -49,6 +52,12 @@
     html, body { overflow-x: hidden; }
     .dc-acct-text { display: none !important; }
     .dc-acct-btn { padding: 4px !important; }
+    /* reclaim header space so the account avatar can't be pushed off-screen */
+    .dc-topbar { padding: 0 10px !important; gap: 8px !important; }
+    .dc-wordmark { letter-spacing: 1.5px !important; }
+    /* fold the standalone help "?" button into the account dropdown */
+    .dc-help { display: none !important; }
+    .dc-help-row { display: flex !important; }
     /* notification & account popovers: anchor to the viewport so their left edge
        can't run off-screen on narrow phones */
     .dc-pop {
@@ -157,9 +166,9 @@
     <div style="min-height: 100vh; display: flex; flex-direction: column;">
 
       <!-- TOP BAR -->
-      <header style="height: 60px; background: #141414; display: flex; align-items: center; padding: 0 20px; gap: 14px; position: sticky; top: 0; z-index: 40; flex-shrink: 0;">
+      <header class="dc-topbar" style="height: 60px; background: #141414; display: flex; align-items: center; padding: 0 20px; gap: 14px; position: sticky; top: 0; z-index: 40; flex-shrink: 0;">
         <div style="background: #CC0000; color: #fff; font-weight: 800; font-size: 15px; letter-spacing: .3px; padding: 7px 10px; line-height: 1;">NC&nbsp;STATE</div>
-        <div style="color: #fff; font-weight: 300; font-size: 17px; letter-spacing: 3px;">REPORTER</div>
+        <div class="dc-wordmark" style="color: #fff; font-weight: 300; font-size: 17px; letter-spacing: 3px;">REPORTER</div>
         <div style="flex: 1;"></div>
 
         <!-- notifications -->
@@ -193,7 +202,7 @@
           </sc-if>
         </div>
 
-        <button style="background: transparent; border: none; color: #E4E4E7; cursor: pointer; padding: 8px; display: flex;" style-hover="{{ hoverWhite }}">
+        <button class="dc-help" style="background: transparent; border: none; color: #E4E4E7; cursor: pointer; padding: 8px; display: flex;" style-hover="{{ hoverWhite }}">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
         </button>
 
@@ -213,6 +222,10 @@
                 <div style="font-weight: 700; font-size: 14px;">{{ userName }}</div>
                 <div style="font-size: 12px; color: #71717A;">{{ userUnity }}</div>
               </div>
+              <a class="dc-help-row" href="https://help.ncsu.edu" target="_blank" rel="noopener" style="padding: 12px 16px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 13.5px; color: #3F3F46; text-decoration: none;" style-hover="{{ hoverRow }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#52525B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                Help &amp; support
+              </a>
               <div onClick="{{ switchRole }}" style="padding: 12px 16px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 13.5px; color: #3F3F46;" style-hover="{{ hoverRow }}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#52525B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg>
                 {{ switchLabel }}
